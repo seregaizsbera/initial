@@ -1,6 +1,8 @@
 package viewer.queryviewer;
 
 import java.awt.Container;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableColumn;
 import viewer.db.DataSource;
 import viewer.util.Util;
 
@@ -50,15 +54,19 @@ public class QueryViewerUI extends JDialog {
     queryField.setLineWrap(true);
     queryField.setWrapStyleWord(true);
     queryField.setAutoscrolls(true);
+    Font originalFont = queryField.getFont();
+    Font newFont = originalFont.deriveFont(originalFont.getSize() + 6.0f);
+    queryField.setFont(newFont);
     queryController = new QueryController(model, this);
     resultPanel = new JTable(model);
     resultPanel.getTableHeader().setReorderingAllowed(true);
-    resultPanel.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+    resultPanel.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     resultPanel.setColumnSelectionAllowed(false);
     resultPanel.setRowSelectionAllowed(true);
     resultPanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     runButton = new JButton(queryController);
     addWindowListener(queryController);
+    addComponentListener(queryController);
 
     Container panel = getContentPane();
     panel.setLayout(new GridBagLayout());
@@ -110,6 +118,27 @@ public class QueryViewerUI extends JDialog {
   }
   String getQuery() {
     return queryField.getText();
+  }
+  void adjustColumns() {
+    TableColumnModel columnModel = resultPanel.getColumnModel();
+    Font font = resultPanel.getFont();
+    FontMetrics fontMetrics = resultPanel.getFontMetrics(font);
+    int columnCount = resultPanel.getColumnCount();
+    for(int i = 0; i < columnCount; i++) {
+      TableColumn column = columnModel.getColumn(i);
+      column.setMinWidth(fontMetrics.stringWidth(model.getColumnName(i)) / 2);
+      column.setPreferredWidth(fontMetrics.stringWidth(model.getColumnName(i)) * 2);
+    }
+    adjustWholeTable();
+  }
+  void adjustWholeTable() {
+    resultPanel.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    Container parent = resultPanel.getParent();
+    parent.doLayout();
+    int w = resultPanel.getWidth();
+    int wp = parent.getWidth();
+    if(w < wp / 2)
+      resultPanel.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
   }
 
   /**

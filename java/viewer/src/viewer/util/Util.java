@@ -20,7 +20,7 @@ import java.util.Calendar;
  */
 public abstract class Util {
   static private long lastTime;
-  static private final boolean DEBUG = true;
+  static private final boolean DEBUG = false;
 
   static void printException(Exception e, PrintStream out) {
     if(e instanceof SQLException)

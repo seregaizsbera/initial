@@ -10,12 +10,12 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JTextArea;
 import viewer.dataeditor.controller.ControlProperties;
+import viewer.db.Attribute;
+import viewer.db.AttributeList;
 import viewer.db.DataSource;
 import viewer.db.MyResultSetMetaData;
 import viewer.db.Row;
 import viewer.db.RowList;
-import viewer.util.StringList;
-import viewer.util.StringListIterator;
 import viewer.util.Util;
 
 /**
@@ -32,13 +32,12 @@ import viewer.util.Util;
  * operations under records of a table.
  */
 public class DataEditorModel implements ControlProperties {
+  static private final String UNKNOWN_VALUE = "Unknown value";
   private final DataSource data;
   private final Action controlAction;
   private final RowList rows;
-  private final StringList columnHeaders;
-  private final StringList columnClassNames;
+  private final AttributeList attributes;
   private String tableName;
-  private int columnCount;
 
   DataEditorModel(DataSource data) {
     this.data = data;
@@ -46,57 +45,60 @@ public class DataEditorModel implements ControlProperties {
                       public void actionPerformed(ActionEvent e) {}
                     };
     rows = new RowList();
-    columnHeaders = new StringList();
-    columnClassNames = new StringList();
+    attributes = new AttributeList();
   }
 
-  private String createWhereClause() {
+  private String createWhereClause(Row row) {
     String res = "";
-    Row row = rows.getRow();
-    StringListIterator i = columnHeaders.getIterator();
-    StringListIterator j = columnClassNames.getIterator();
-    int k = 0;
-    while(i.hasNext()) {
-      String columnName = i.getNext();
-      String columnClassName = j.getNext();
-      k++;
-      String strValue = row.createSqlBooleanValue(k, columnClassName);
-      res += columnName + strValue;
-      if(i.hasNext())
+    int columnCount = attributes.size();
+    for(int i = 1; i <= columnCount; i++) {
+      Attribute attribute = attributes.getAttribute(i);
+      String strValue = row.getStr(i);
+      if(!attribute.isSearchable() || strValue == UNKNOWN_VALUE)
+        continue;
+      if(!res.equals(""))
         res += " and ";
+      res += tableName + "." + attribute.getName() + attribute.createSqlBooleanValue(strValue);
     }
     return res;
   }
-  private String createInsertStatement(Row newRow) {
-    String res = "insert into " + tableName + " values (";
-    StringListIterator i = columnClassNames.getIterator();
-    int j = 0;
-    while(i.hasNext()) {
-      String columnClassName = i.getNext();
-      j++;
-      String strValue = newRow.createSqlValue(j, columnClassName);
-      res += strValue;
-      if(i.hasNext())
-        res += ',';
+  private String createInsertStatement(Row row) {
+    String res = "";
+    String fields = "";
+    int columnCount = attributes.size();
+    for(int i = 1; i <= columnCount; i++) {
+      Attribute attribute = attributes.getAttribute(i);
+      if(!attribute.isEditable()) {
+        row.setStr(i, UNKNOWN_VALUE);
+        continue;
+      }
+      if(!res.equals("")) {
+        res += ", ";
+        fields += ", ";
+      }
+      fields += attribute.getName();
+      String strValue = row.getStr(i);
+      res += attribute.createSqlValue(strValue);
     }
-    res += ')';
+    res = "insert into " + tableName + " (" + fields + ") values (" + res + ")";
+    Util.debug(res);
     return res;
   }
-  private String createUpdateStatement(Row newRow) {
-    String res = "update " + tableName + " set ";
-    StringListIterator i = columnHeaders.getIterator();
-    StringListIterator j = columnClassNames.getIterator();
-    int k = 0;
-    while(i.hasNext()) {
-      String columnName = i.getNext();
-      String columnClassName = j.getNext();
-      k++;
-      String strValue = newRow.createSqlValue(k, columnClassName);
-      res += columnName + "=" + strValue;
-      if(i.hasNext())
-        res += ',';
+  private String createUpdateStatement(Row row) {
+    String res = "";
+    int columnCount = attributes.size();
+    for(int i = 1; i <= columnCount; i++) {
+      Attribute attribute = attributes.getAttribute(i);
+      if(!attribute.isEditable())
+        continue;
+      if(!res.equals(""))
+        res += ", ";
+      String strValue = row.getStr(i);
+      res += attribute.getName() + "=" + attribute.createSqlValue(strValue);
     }
-    res += " where " + createWhereClause();
+    String where = createWhereClause(rows.getRow());
+    res = "update " + tableName + " set " + res + " where " + where;
+    Util.debug(res);
     return res;
   }
 
@@ -109,19 +111,15 @@ public class DataEditorModel implements ControlProperties {
     closeTable();
     ResultSet rs = data.getTableForUpdating(tableName);
     ResultSetMetaData rsmd = new MyResultSetMetaData(rs.getMetaData());
-    columnCount = rsmd.getColumnCount();
-    for(int i = 1; i <= columnCount; i++) {
-      columnHeaders.addStrLast(rsmd.getColumnLabel(i));
-      columnClassNames.addStrLast(rsmd.getColumnClassName(i));
-    }
+    attributes.fillWith(rsmd);
     rows.fillWith(rs);
     controlAction.putValue(NUMBER_OF_RECORDS, new Integer(getSize()));
     controlAction.putValue(NEW_RECORD_ADDED, Boolean.FALSE);
     this.tableName = tableName;
     data.releaseTable();
   }
-  StringList getStructure() {
-    return columnHeaders;
+  Attribute getAttribute(int index) {
+    return attributes.getAttribute(index);
   }
   boolean hasPrevious() {
     return rows.hasPrevious();
@@ -139,7 +137,7 @@ public class DataEditorModel implements ControlProperties {
     return rows.getSize();
   }
   int getColumnCount() {
-    return columnCount;
+    return attributes.size();
   }
   void addListener(PropertyChangeListener listener) {
     controlAction.addPropertyChangeListener(listener);
@@ -150,10 +148,8 @@ public class DataEditorModel implements ControlProperties {
    */
   public void closeTable() {
     rows.clear();
-    columnHeaders.clear();
-    columnClassNames.clear();
     tableName = null;
-    columnCount = 0;
+    attributes.clear();
   }
 
   /**
@@ -194,7 +190,7 @@ public class DataEditorModel implements ControlProperties {
   public void newRecord() {
     rows.addRowLast(null);
     controlAction.putValue(NUMBER_OF_RECORDS, new Integer(getSize()));
-    controlAction.putValue(RECORD_POSITION, new Row(columnCount));
+    controlAction.putValue(RECORD_POSITION, new Row(attributes.size()));
     controlAction.putValue(NEW_RECORD_ADDED, Boolean.TRUE);
   }
 
@@ -206,6 +202,7 @@ public class DataEditorModel implements ControlProperties {
   public void updateRecord(Vector fields) {
     boolean newRecord = ((Boolean)controlAction.getValue(NEW_RECORD_ADDED)).booleanValue();
     String sql;
+    int columnCount = attributes.size();
     Row newRow = new Row(columnCount);
     for(int i = 1; i <= columnCount; i++)
       newRow.setStr(i, ((JTextArea)fields.get(i - 1)).getText());
@@ -229,7 +226,8 @@ public class DataEditorModel implements ControlProperties {
   public void deleteRecord() {
     boolean newRecord = ((Boolean)controlAction.getValue(NEW_RECORD_ADDED)).booleanValue();
     if(!newRecord) {
-      String sql = "delete from " + tableName + " where " + createWhereClause();
+      String sql = "delete from " + tableName + " where " + createWhereClause(rows.getRow());
+      Util.debug(sql);
       try {
         data.execSQL(sql);
       } catch(SQLException e) {

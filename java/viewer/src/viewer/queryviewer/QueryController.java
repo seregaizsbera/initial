@@ -5,6 +5,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.AbstractAction;
 import viewer.util.Util;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 /**
  * <p>Title: Viewer</p>
@@ -19,7 +21,7 @@ import viewer.util.Util;
  * QueryController class contains all reactions on user activity
  * when he works with query viewer.
  */
-class QueryController extends AbstractAction implements WindowListener {
+class QueryController extends AbstractAction implements WindowListener, ComponentListener {
   private final QueryViewerModel model;
   private final QueryViewerUI queryViewer;
 
@@ -36,6 +38,7 @@ class QueryController extends AbstractAction implements WindowListener {
 
   public void actionPerformed(ActionEvent e) {
     model.openQuery(queryViewer.getQuery());
+    queryViewer.adjustColumns();
   }
 
   public void windowClosing(WindowEvent e) {
@@ -48,4 +51,10 @@ class QueryController extends AbstractAction implements WindowListener {
   public void windowDeiconified(WindowEvent e) {}
   public void windowActivated(WindowEvent e) {}
   public void windowDeactivated(WindowEvent e) {}
+  public void componentResized(ComponentEvent e) {
+    queryViewer.adjustWholeTable();
+  }
+  public void componentMoved(ComponentEvent e) {}
+  public void componentShown(ComponentEvent e) {}
+  public void componentHidden(ComponentEvent e) {}
 }

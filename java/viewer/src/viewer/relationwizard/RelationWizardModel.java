@@ -53,11 +53,12 @@ public class RelationWizardModel extends AbstractTableModel {
       Attribute attr = (Attribute)i.next();
       sql += attr.getName() + ' ' + attr.getType();
       if(attr.getSQLType() == Types.VARCHAR)
-        sql += '(' + attr.getLength().toString() + ')';
+        sql += "(" + attr.getLength() + ")";
       if(i.hasNext())
         sql += ", ";
     }
     sql += ')';
+    Util.debug(sql);
     data.execSQL(sql);
   }
 
@@ -86,7 +87,7 @@ public class RelationWizardModel extends AbstractTableModel {
         break;
       case 2:
       default:
-        attr.setLength((Integer)aValue);
+        attr.setLength(((Integer)aValue).intValue());
         break;
     }
   }
@@ -116,7 +117,7 @@ public class RelationWizardModel extends AbstractTableModel {
         return attr.getType();
       case 2:
       default:
-        return attr.getLength();
+        return new Integer(attr.getLength());
     }
   }
 }

@@ -35,41 +35,6 @@ public class Row extends Vector {
   }
 
   /**
-   * create SQL expression representing the value of specified
-   * column
-   *
-   * @param column number of column
-   * @param columnClassName name of column Java class
-   * @return string represinting value of the specified column
-   *                in SQL with respect to its Java class name
-   */
-  public String createSqlValue(int column, String columnClassName) {
-    String strValue = getStr(column);
-    if(strValue == null || strValue.equals(""))
-      strValue = "null";
-    else if(columnClassName.equals(MyResultSetMetaData.STRING_TYPE))
-      strValue = '\'' + strValue + '\'';
-    return strValue;
-  }
-
-  /**
-   * Create SQL expression representing condition for record to
-   * contain the same value in specified column as in this Row object
-   *
-   * @param column number of column
-   * @param columnClassName column Java class name
-   * @return string representing desired expression in SQL
-   */
-  public String createSqlBooleanValue(int column, String columnClassName) {
-    String strValue = createSqlValue(column, columnClassName);
-    if(strValue.equals("null"))
-      strValue = " is null";
-    else
-      strValue = '=' + strValue;
-    return strValue;
-  }
-
-  /**
    * get string value of specified column
    *
    * @param index index of column
@@ -86,7 +51,7 @@ public class Row extends Vector {
    * @param str new value
    */
   public void setStr(int index, String str) {
-    super.add(index - 1, str);
+    super.set(index - 1, str);
   }
 
   public boolean equals(Object o) {

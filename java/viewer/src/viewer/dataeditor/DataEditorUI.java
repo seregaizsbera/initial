@@ -28,6 +28,7 @@ import viewer.dataeditor.controller.NextAction;
 import viewer.dataeditor.controller.PrevAction;
 import viewer.dataeditor.controller.QueryAction;
 import viewer.dataeditor.controller.UpdateAction;
+import viewer.db.Attribute;
 import viewer.db.DataSource;
 import viewer.db.Row;
 import viewer.navigator.Navigator;
@@ -151,11 +152,7 @@ public class DataEditorUI extends JDialog
     this.tableName = tableName;
     setTitle("Table - " + tableName);
     model.openTable(tableName);
-    StringList columns = model.getStructure();
     columnsPanel.setLayout(new GridBagLayout());
-    int size = columns.size();
-    labels.setSize(size);
-    fields.setSize(size);
     GridBagConstraints cl = new GridBagConstraints(0, 0, 1, 1, 0, 0,
         GridBagConstraints.NORTHEAST,
         GridBagConstraints.NONE,
@@ -166,25 +163,28 @@ public class DataEditorUI extends JDialog
         GridBagConstraints.HORIZONTAL,
         new Insets(10, 5, 10, 10),
         0, 0);
-    int j = 0;
-    for(StringListIterator i = columns.getIterator(); i.hasNext(); j++) {
-      String column = i.getNext();
-      JLabel label = new JLabel(column);
+    int columnCount = model.getColumnCount();
+    labels.setSize(columnCount);
+    fields.setSize(columnCount);
+    for(int i = 0; i < columnCount; i++) {
+      Attribute attribute = model.getAttribute(i + 1);
+      JLabel label = new JLabel(attribute.getLabel());
       JTextArea field = new JTextArea();
       field.setRows(ROWS_IN_FIELD);
       field.setColumns(15);
       field.setLineWrap(true);
       field.setWrapStyleWord(false);
       field.setAutoscrolls(true);
-      labels.set(j, label);
-      fields.set(j, field);
+      field.setEditable(attribute.isEditable());
+      labels.set(i, label);
+      fields.set(i, field);
       GridBagConstraints cl1 = (GridBagConstraints)cl.clone();
-      cl1.gridx = (j % 2) * 4;
-      cl1.gridy = (j / 2) * ROWS_IN_FIELD;
+      cl1.gridx = (i % 2) * 4;
+      cl1.gridy = (i / 2) * ROWS_IN_FIELD;
       columnsPanel.add(label, cl1);
       GridBagConstraints cf1 = (GridBagConstraints)cf.clone();
-      cf1.gridx = (j % 2) * 4 + 1;
-      cf1.gridy = (j / 2) * ROWS_IN_FIELD;
+      cf1.gridx = (i % 2) * 4 + 1;
+      cf1.gridy = (i / 2) * ROWS_IN_FIELD;
       columnsPanel.add(new JScrollPane(field,
                                        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),
