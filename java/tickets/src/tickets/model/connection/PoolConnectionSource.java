@@ -44,7 +44,8 @@ class PoolConnectionSource implements ConnectionSource {
 
   public Connection getConnection() {
     try {
-      return getDataSource().getConnection();
+      return getDataSource().getConnection(param.getDbUserName(),
+                                           param.getDbUserPassword());
     }
     catch(SQLException e) {
       Util.debug(e);

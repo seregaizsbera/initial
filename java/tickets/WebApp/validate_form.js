@@ -100,9 +100,11 @@ function checkProblems() {
 function checkTime(element, displayName) {
   validateProblems[element.name] = "Время должно быть в формате 23:35";
   validateNames[element.name] = displayName;
-  var result = true;
-  if(element.value != "" && !checkFormat(element.value, "##:##"))
-    result = false;
+  var value = element.value;
+  var result = checkFormat(value, "##:##");
+  result &= inRange(element.value.substring(0, 2), 0, 23);
+  result &= inRange(element.value.substring(3, 5), 0, 59);
+  result |= value == "";
   validateResults[element.name] = result;
   return true;
 }
@@ -110,9 +112,12 @@ function checkTime(element, displayName) {
 function checkDate(element, displayName) {
   validateProblems[element.name] = "Дата должна быть в формате 17.07.1980";
   validateNames[element.name] = displayName;
-  var result = true;
-  if(element.value != "" && !checkFormat(element.value, "##.##.####"))
-    result = false;
+  var value = element.value;
+  var result = checkFormat(value, "##.##.####");
+  result &= inRange(value.substring(0, 2), 1, 31);
+  result &= inRange(value.substring(3, 5), 1, 12);
+  result &= inRange(value.substring(6, 10), 1900, 3000);
+  result |= value == "";
   validateResults[element.name] = result;
   return true;
 }

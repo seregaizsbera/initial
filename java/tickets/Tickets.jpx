@@ -67,14 +67,9 @@
     <property category="archiving" name="defaultLibraryState" value="3"/>
     <property category="archiving" name="libraryStates.1" value="0:Servlet"/>
     <property category="archiving" name="libraryStates.2" value="0:Tomcat 4.0 Servlet"/>
+    <property category="archiving" name="targetCompressed" value="1"/>
     <property category="archiving" name="targetPath" value="TicketsWebApp.war"/>
     <property category="webapp" name="docroot" value="WebApp"/>
     <property category="webapp" name="webinf.include" value="0"/>
   </node>
-  <file path="WebApp/WEB-INF/taglib/aircrafts.tld"/>
-  <file path="WebApp/WEB-INF/taglib/cities.tld"/>
-  <file path="WebApp/WEB-INF/taglib/struts-bean.tld"/>
-  <file path="WebApp/WEB-INF/taglib/struts-logic.tld"/>
-  <file path="src/tickets.properties"/>
-  <file path="WebApp/WEB-INF/taglib/web-jsptaglibrary_1_2.dtd"/>
 </project>

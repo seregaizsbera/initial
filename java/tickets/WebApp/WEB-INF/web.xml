@@ -240,18 +240,18 @@
   </error-page>
   <taglib>
     <taglib-uri>aircrafts_tag</taglib-uri>
-    <taglib-location>/WEB-INF/taglib/aircrafts.tld</taglib-location>
+    <taglib-location>/taglib/aircrafts.tld</taglib-location>
   </taglib>
   <taglib>
     <taglib-uri>cities_tag</taglib-uri>
-    <taglib-location>/WEB-INF/taglib/cities.tld</taglib-location>
+    <taglib-location>/taglib/cities.tld</taglib-location>
   </taglib>
   <taglib>
     <taglib-uri>struts_bean_tag</taglib-uri>
-    <taglib-location>/WEB-INF/taglib/struts-bean.tld</taglib-location>
+    <taglib-location>/taglib/struts-bean.tld</taglib-location>
   </taglib>
   <taglib>
     <taglib-uri>struts_logic_tag</taglib-uri>
-    <taglib-location>/WEB-INF/taglib/struts-logic.tld</taglib-location>
+    <taglib-location>/taglib/struts-logic.tld</taglib-location>
   </taglib>
 </web-app>

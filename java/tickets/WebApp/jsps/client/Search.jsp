@@ -59,7 +59,7 @@
      <td><i>(הה.לל.דדדד)</i></td>
      <td></td>
      <td>Âנולÿ גûכועא:</td>
-     <td>
+     <td nowrap>
       <select name="departureTimeCondition">
        <option value="1">Äמ</option>
        <option value="2" selected>Ïמסכו</option>
@@ -84,7 +84,7 @@
      <td><i>(הה.לל.דדדד)</i></td>
      <td></td>
      <td>Âנולÿ ןמסאהךט:</td>
-     <td>
+     <td nowrap>
       <select name="arrivalTimeCondition">
        <option value="1" selected>Äמ</option>
        <option value="2">Ïמסכו</option>

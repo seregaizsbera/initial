@@ -21,8 +21,7 @@
    или вернитесь на <a href="javascript:history.back()">предыдущую страницу</a>.
   </p>
   <h2>
-   <%=exception.getClass().getName() +
-      (exception.getMessage() == null ? "" : ": " + exception.getMessage())%>
+   <%=(exception.getMessage() == null ? "" : exception.getMessage())%>
   </h2>
   <br>
   <p><a href="<%=request.getContextPath()%>/goodbye.html">Выход</a></p>

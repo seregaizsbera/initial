@@ -30,7 +30,7 @@ public class RuntimeGenericException extends RuntimeException
   }
 
   public RuntimeGenericException(Throwable parent) {
-    super();
+    super(parent.getMessage());
     this.parent = parent;
   }
 
