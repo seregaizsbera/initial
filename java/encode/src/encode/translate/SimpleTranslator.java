@@ -25,8 +25,8 @@ class SimpleTranslator implements Translator {
     private final String outputCharset;
 
     SimpleTranslator(String inputCharset, String outputCharset) {
-        this.inputCharset = inputCharset.toUpperCase();
-        this.outputCharset = outputCharset.toUpperCase();
+        this.inputCharset = inputCharset;
+        this.outputCharset = outputCharset;
     }
 
     public void translate(InputStream in, OutputStream out) {
