@@ -25,16 +25,20 @@ public class Main {
   private static int usage(int exitValue) {
     PrintStream out = (exitValue == 0) ? System.out : System.err;
     out.println(
-        "Usage: encode [-f input-charset] [-t output-charset] [-c(+|-|=)]" +
-        " [-o outfile|-s] [--] [file...]\n" +
-        "       encode --help\n\n" +
-        " Переводит текст из одной кодировки в другую\n" +
-        "работает, почти как cat, только -s означает перевести файлы\n" +
-        "в самих себя, -o - результат перевода поместить в outfile.\n" +
-        " -c+ (-, =) - окончания строк переводить в формат Unix" +
-        " (DOS, как есть)\n" +
-        " --         - означает, что дальше следуют только имена файлов\n" +
-        " --help     - выводит это сообщение\n\n");
+        "Синтаксис: encode [опции] [--] [файл1 файл2...]\n" +
+        "           encode --help | -h\n" +
+        "Переводит текстовые файлы из одной кодировки в другую.\n" +
+        "Используются следующие опции:\n" +
+        " -s         - перевести файлы в самих себя,\n" +
+        " -o outfile - результат перевода поместить в outfile,\n" +
+        " -c(+|-|=)  - окончания строк переводить в формат Unix" +
+        " (DOS, как есть),\n" +
+        " -f charset - исходный текст представлен в кодировке charset,\n" +
+        " -o charset - перевести текст в кодировку charset,\n" +
+        " --         - означает, что дальше следуют только имена файлов,\n" +
+        " --help, -h - вывести это сообщение\n" +
+        "По умолчанию используются следующие значения опций:\n" +
+        " encode -f windows-1251 -t koi8-r -o - -c= -- -\n");
     return exitValue;
   }
 
@@ -42,6 +46,8 @@ public class Main {
     try {
       Param param = Param.getInstance();
       param.parseArgs(args);
+      if(param.isHelpRequested())
+        System.exit(usage(0));
       Translator translator = new TranslatorFactory().getTranslator();
       InputStreamMaker inputStreamMaker =
           new InputStreamMakerFactory().getInputStreamMaker();
@@ -56,15 +62,15 @@ public class Main {
       }
     }
     catch(InvalidArgsException e) {
-      System.err.println("encode: " + e.getMessage() + ".");
+      System.err.println("encode: " + e.getMessage() + ".\n");
       System.exit(usage(1));
     }
     catch(UnsupportedEncodingException e) {
-      System.err.println("encode: " + e.getMessage() + ".");
+      System.err.println("encode: " + e.getMessage() + ".\n");
       System.exit(1);
     }
     catch(FileNotFoundException e) {
-      System.err.println("encode: " + e.getMessage() + ".");
+      System.err.println("encode: " + e.getMessage() + ".\n");
       System.exit(1);
     }
   }

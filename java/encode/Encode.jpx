@@ -10,6 +10,7 @@
   <property category="runtime.0" name="ConfigurationName" value="Default"/>
   <property category="runtime.0" name="RunnableType" value="com.borland.jbuilder.runtime.ApplicationRunner"/>
   <property category="runtime.0" name="application.class" value="encode.Main"/>
+  <property category="runtime.0" name="application.parameters" value="-- -"/>
   <property category="runtime.0" name="appserver.parameters" value=""/>
   <property category="runtime.0" name="appserver.servername" value=""/>
   <property category="runtime.0" name="appserver.vmparameters" value=""/>
@@ -68,7 +69,6 @@
     <property category="archiving" name="executableFiles.3" value="bin/encode-linux"/>
     <property category="archiving" name="executableFiles.4" value="Encode-solaris"/>
     <property category="archiving" name="executableFiles.5" value="Encode-mac"/>
-    <property category="archiving" name="targetCompressed" value="1"/>
     <property category="archiving" name="targetPath" value="bin/encode.jar"/>
   </node>
 </project>

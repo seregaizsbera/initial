@@ -56,8 +56,9 @@ public class Param {
     argsWithoutOptions.add("-c+");
     argsWithoutOptions.add("-c-");
     argsWithoutOptions.add("-c=");
-    argsWithoutOptions.add("--");
+    argsWithoutOptions.add("-h");
     argsWithoutOptions.add("--help");
+    argsWithoutOptions.add("--");
     final int START = 0;
     final int B = 1;
     final int C = 2;
@@ -170,7 +171,7 @@ public class Param {
             outputMode = SELF_OUTPUT;
             i++;
             state = START;
-          } else if(arg.equals("--help")) {
+          } else if(arg.equals("--help") || arg.equals("-h")) {
             i++;
             state = HELP;
           } else
@@ -206,7 +207,7 @@ public class Param {
       }
     }
     if(inputFiles.isEmpty() ||
-       (inputFiles.size() == 1 && inputFiles.toArray()[0].equals("-"))) {
+       (inputFiles.size() == 1 && inputFiles.iterator().next().equals("-"))) {
       inputFiles.clear();
       inputMode = CONSOLE_INPUT;
       if(outputMode == SELF_OUTPUT)

@@ -27,13 +27,13 @@ class SimpleTranslator implements Translator {
     if(in == null || out == null)
       return;
     byte buf[] = new byte[1024 * 1024];
-    int bytesRead = 0;
     try {
-      do {
-        bytesRead = in.read(buf);
+      int bytesRead = in.read(buf);
+      while(bytesRead > 0) {
         String strBuf = new String(buf, 0, bytesRead, inputCharset);
         out.write(strBuf.getBytes(outputCharset));
-      } while(bytesRead == buf.length);
+        bytesRead = in.read(buf);
+      }
     }
     catch(IOException e) {
       e.printStackTrace();
