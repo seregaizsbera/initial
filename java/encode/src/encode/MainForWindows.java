@@ -87,11 +87,11 @@ public class MainForWindows {
       System.exit(usage(1));
     }
     catch(UnsupportedEncodingException e) {
-      System.err.println("encode: " + e.toString() + ".\n");
+      System.err.println("encode: " + e.toString() + ".");
       System.exit(1);
     }
     catch(FileNotFoundException e) {
-      System.err.println("encode: " + e.toString() + ".\n");
+      System.err.println("encode: " + e.toString() + ".");
       System.exit(1);
     }
   }
