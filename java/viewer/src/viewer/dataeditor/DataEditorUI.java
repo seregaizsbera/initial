@@ -1,39 +1,16 @@
 package viewer.dataeditor;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.sql.SQLException;
-import java.util.Vector;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import viewer.dataeditor.controller.CloseAction;
-import viewer.dataeditor.controller.ControlProperties;
-import viewer.dataeditor.controller.DeleteAction;
-import viewer.dataeditor.controller.FirstAction;
-import viewer.dataeditor.controller.LastAction;
-import viewer.dataeditor.controller.NewAction;
-import viewer.dataeditor.controller.NextAction;
-import viewer.dataeditor.controller.PrevAction;
-import viewer.dataeditor.controller.QueryAction;
-import viewer.dataeditor.controller.UpdateAction;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.sql.*;
+import java.util.*;
+import javax.swing.*;
+import viewer.dataeditor.controller.*;
 import viewer.db.Attribute;
 import viewer.db.DataSource;
 import viewer.db.Row;
 import viewer.navigator.Navigator;
-import viewer.util.StringList;
-import viewer.util.StringListIterator;
 import viewer.util.Util;
 
 /**
@@ -48,8 +25,7 @@ import viewer.util.Util;
 /**
  * DataEditorUI class provides user interface of data editor
  */
-public class DataEditorUI extends JDialog
-                          implements PropertyChangeListener, ControlProperties {
+public class DataEditorUI extends JDialog implements PropertyChangeListener, ControlProperties {
   private final int ROWS_IN_FIELD = 3;
   private String tableName;
   private final Vector labels;
@@ -85,6 +61,7 @@ public class DataEditorUI extends JDialog
     setModal(true);
     setBounds(Util.centerOnScreen(640, 480));
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     setVisible(false);
 
     model = new DataEditorModel(data);
@@ -128,7 +105,18 @@ public class DataEditorUI extends JDialog
     buttonPanel.add(deleteButton);
     buttonPanel.add(queryButton);
 
-    Container panel = getContentPane();
+    JComponent panel = (JComponent)getContentPane();
+
+    addKeyListener(new KeyAdapter() {
+      public void keyPressed(KeyEvent e) {
+        if(e.getModifiers() == 0 && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+          dispose();
+          e.consume();
+        }
+        super.keyPressed(e);
+      }
+    });
+
     panel.setLayout(new BorderLayout());
     panel.add(buttonPanel, BorderLayout.NORTH);
     panel.add(new JScrollPane(columnsPanel), BorderLayout.CENTER);
@@ -147,22 +135,15 @@ public class DataEditorUI extends JDialog
     fields.clear();
     columnsPanel.removeAll();
   }
+
   private void setTable(String tableName) throws SQLException {
     unsetTable();
     this.tableName = tableName;
     setTitle("Table - " + tableName);
     model.openTable(tableName);
     columnsPanel.setLayout(new GridBagLayout());
-    GridBagConstraints cl = new GridBagConstraints(0, 0, 1, 1, 0, 0,
-        GridBagConstraints.NORTHEAST,
-        GridBagConstraints.NONE,
-        new Insets(10, 10, 10, 5),
-        0, 0);
-    GridBagConstraints cf = new GridBagConstraints(0, 0, 3, ROWS_IN_FIELD, 1, 0,
-        GridBagConstraints.NORTHWEST,
-        GridBagConstraints.HORIZONTAL,
-        new Insets(10, 5, 10, 10),
-        0, 0);
+    GridBagConstraints cl = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(10, 10, 10, 5), 0, 0);
+    GridBagConstraints cf = new GridBagConstraints(0, 0, 3, ROWS_IN_FIELD, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(10, 5, 10, 10), 0, 0);
     int columnCount = model.getColumnCount();
     labels.setSize(columnCount);
     fields.setSize(columnCount);
@@ -185,13 +166,11 @@ public class DataEditorUI extends JDialog
       GridBagConstraints cf1 = (GridBagConstraints)cf.clone();
       cf1.gridx = (i % 2) * 4 + 1;
       cf1.gridy = (i / 2) * ROWS_IN_FIELD;
-      columnsPanel.add(new JScrollPane(field,
-                                       JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                       JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),
-                                       cf1);
+      columnsPanel.add(new JScrollPane(field, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), cf1);
     }
     model.first();
   }
+
   private void adjustButtons() {
     boolean isThereRecords = !model.isEmpty();
     firstAction.setEnabled(isThereRecords);
@@ -203,7 +182,7 @@ public class DataEditorUI extends JDialog
   }
 
   protected void finalize() throws java.lang.Throwable {
-    Util.debug(getClass().getName() + ".finalize(" + hashCode() +')');
+    Util.debug(getClass().getName() + ".finalize(" + hashCode() + ')');
     super.finalize();
   }
 
@@ -221,8 +200,8 @@ public class DataEditorUI extends JDialog
   public void propertyChange(PropertyChangeEvent e) {
     String property = e.getPropertyName();
     if(property == NUMBER_OF_RECORDS) {
-        adjustButtons();
-        sizeLabel.setText(e.getNewValue().toString());
+      adjustButtons();
+      sizeLabel.setText(e.getNewValue().toString());
     } else if(property == RECORD_POSITION) {
       nextAction.setEnabled(model.hasNext());
       prevAction.setEnabled(model.hasPrevious());

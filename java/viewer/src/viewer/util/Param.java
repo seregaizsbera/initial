@@ -1,20 +1,7 @@
 package viewer.util;
 
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -49,6 +36,10 @@ public class Param extends JDialog {
   private String userName;
   private String password;
 
+  private static void printObject(Object o) {
+    System.out.print(o.getClass().getName() + ": '" + o.toString() +"'");
+  }
+
   /**
    * Constructor for Param object
    *
@@ -78,11 +69,11 @@ public class Param extends JDialog {
     driverNameBox.getEditor().setItem(jdbcDriverName);
 
     addWindowListener(new WindowAdapter() {
-                       public void windowClosing(WindowEvent e) {
-                         cancelPressed();
-                       }
-                     });
-   okButton = new JButton(new AbstractAction("OK") {
+      public void windowClosing(WindowEvent e) {
+        cancelPressed();
+      }
+    });
+    okButton = new JButton(new AbstractAction("OK") {
       public void actionPerformed(ActionEvent e) {
         okPressed();
       }
@@ -98,59 +89,37 @@ public class Param extends JDialog {
       }
     });
 
-    Container panel = getContentPane();
+    JComponent panel = (JComponent)getContentPane();
+
+    InputMap inputMap = okButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    inputMap.put(KeyStroke.getKeyStroke("pressed ENTER"), "pressed");
+    inputMap.put(KeyStroke.getKeyStroke("released ENTER"), "released");
+    inputMap = cancelButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    inputMap.put(KeyStroke.getKeyStroke("pressed ESCAPE"), "pressed");
+    inputMap.put(KeyStroke.getKeyStroke("released ESCAPE"), "released");
+    inputMap.put(KeyStroke.getKeyStroke("pressed ENTER"), "pressed");
+    inputMap.put(KeyStroke.getKeyStroke("released ENTER"), "released");
+
     panel.setLayout(new GridBagLayout());
 
-    GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 0, 0,
-        GridBagConstraints.EAST,
-        GridBagConstraints.NONE,
-        new Insets(10, 10, 10, 5),
-        0, 0);
+    GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 10, 5), 0, 0);
     panel.add(new JLabel("URL"), c);
-    c = new GridBagConstraints(1, 0, 2, 1, 1, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.BOTH,
-                               new Insets(10, 0, 10, 10),
-                               0, 0);
+    c = new GridBagConstraints(1, 0, 2, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(10, 0, 10, 10), 0, 0);
     panel.add(urlField, c);
 
-    c = new GridBagConstraints(0, 1, 1, 1, 0, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.NONE,
-                               new Insets(10, 10, 10, 5),
-                               0, 0);
+    c = new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 10, 5), 0, 0);
     panel.add(new JLabel("User"), c);
-    c = new GridBagConstraints(1, 1, 2, 1, 1, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.BOTH,
-                               new Insets(10, 0, 10, 10),
-                               0, 0);
+    c = new GridBagConstraints(1, 1, 2, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(10, 0, 10, 10), 0, 0);
     panel.add(userNameField, c);
 
-    c = new GridBagConstraints(0, 2, 1, 1, 0, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.NONE,
-                               new Insets(10, 10, 10, 5),
-                               0, 0);
+    c = new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 10, 5), 0, 0);
     panel.add(new JLabel("Password"), c);
-    c = new GridBagConstraints(1, 2, 2, 1, 1, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.BOTH,
-                               new Insets(10, 0, 10, 10),
-                               0, 0);
+    c = new GridBagConstraints(1, 2, 2, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(10, 0, 10, 10), 0, 0);
     panel.add(passwordField, c);
 
-    c = new GridBagConstraints(0, 3, 1, 1, 0, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.NONE,
-                               new Insets(10, 10, 10, 5),
-                               0, 0);
+    c = new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 10, 5), 0, 0);
     panel.add(new JLabel("Driver"), c);
-    c = new GridBagConstraints(1, 3, 2, 1, 1, 0,
-                               GridBagConstraints.EAST,
-                               GridBagConstraints.BOTH,
-                               new Insets(10, 0, 10, 10),
-                               0, 0);
+    c = new GridBagConstraints(1, 3, 2, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(10, 0, 10, 10), 0, 0);
     panel.add(driverNameBox, c);
 
     JPanel temp = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -158,11 +127,7 @@ public class Param extends JDialog {
     temp.add(cancelButton);
     temp.add(resetButton);
 
-    c = new GridBagConstraints(0, 4, 3, 1, 0, 0,
-                               GridBagConstraints.CENTER,
-                               GridBagConstraints.BOTH,
-                               new Insets(10, 10, 10, 10),
-                               0, 0);
+    c = new GridBagConstraints(0, 4, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0);
     panel.add(temp, c);
   }
 
@@ -173,9 +138,11 @@ public class Param extends JDialog {
     password = String.valueOf(passwordField.getPassword());
     dispose();
   }
+
   private void cancelPressed() {
     System.exit(0);
   }
+
   private void resetPressed() {
     jdbcDriverName = DEFAULT_DRIVER;
     url = DEFAULT_URL;
@@ -187,6 +154,7 @@ public class Param extends JDialog {
     userNameField.setText(userName);
     passwordField.setText(password);
   }
+
   private void readParameters(String args[]) {
     int n = args.length;
     if(n > 3)
@@ -200,7 +168,7 @@ public class Param extends JDialog {
   }
 
   protected void finalize() throws java.lang.Throwable {
-    Util.debug(getClass().getName() + ".finalize(" + hashCode() +')');
+    Util.debug(getClass().getName() + ".finalize(" + hashCode() + ')');
     super.finalize();
   }
 
@@ -237,7 +205,7 @@ public class Param extends JDialog {
    * @return password
    */
   public String getPassword() {
-     return password;
+    return password;
   }
 
   /**
