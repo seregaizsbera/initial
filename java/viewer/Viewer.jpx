@@ -1,88 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--JBuilder XML Project-->
 <project>
-  <property category="debug.2" name="BuildTargetOnDebug" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
-  <property category="editor.general" name="line_ending.style" value="3"/>
-  <property category="idl" name="ProcessIDL" value="false"/>
-  <property category="runtime" name="ConfigurationCount" value="2"/>
-  <property category="runtime.0" name="BuildTargetOnRun" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
-  <property category="runtime.0" name="ConfigurationName" value="Viewer"/>
-  <property category="runtime.0" name="RunnableType" value="com.borland.jbuilder.runtime.ApplicationRunner"/>
-  <property category="runtime.0" name="application.class" value="viewer.navigator.Viewer"/>
-  <property category="runtime.0" name="application.parameters" value="jdbc:postgresql:sergey sergey changeit org.postgresql.Driver"/>
-  <property category="runtime.0" name="appserver.ejbJarsSaved" value="1"/>
-  <property category="runtime.0" name="appserver.parameters" value=""/>
-  <property category="runtime.0" name="appserver.servername" value=""/>
-  <property category="runtime.0" name="appserver.vmparameters" value=""/>
-  <property category="runtime.0" name="jsprunner.launchuri" value="/"/>
-  <property category="runtime.0" name="server.arguments" value=""/>
-  <property category="runtime.0" name="server.disableServerClassTracing" value="0"/>
-  <property category="runtime.0" name="server.instance.name" value=""/>
-  <property category="runtime.0" name="server.name" value="Tomcat 3.3"/>
-  <property category="runtime.0" name="server.vmparameters" value=""/>
-  <property category="runtime.0" name="test.harness" value="com.borland.jbuilder.unittest.JBTestRunner"/>
-  <property category="runtime.1" name="BuildTargetOnRun" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
-  <property category="runtime.1" name="ConfigurationName" value="No parameters"/>
-  <property category="runtime.1" name="RunnableType" value="com.borland.jbuilder.runtime.ApplicationRunner"/>
-  <property category="runtime.1" name="application.class" value="viewer.navigator.Viewer"/>
-  <property category="runtime.1" name="appserver.ejbJarsSaved" value="1"/>
-  <property category="runtime.1" name="appserver.parameters" value=""/>
-  <property category="runtime.1" name="appserver.servername" value=""/>
-  <property category="runtime.1" name="appserver.vmparameters" value=""/>
-  <property category="runtime.1" name="jsprunner.launchuri" value="/"/>
-  <property category="runtime.1" name="server.arguments" value=""/>
-  <property category="runtime.1" name="server.disableServerClassTracing" value="0"/>
-  <property category="runtime.1" name="server.instance.name" value=""/>
-  <property category="runtime.1" name="server.name" value="Tomcat 3.3"/>
-  <property category="runtime.1" name="server.vmparameters" value=""/>
-  <property category="runtime.1" name="test.harness" value="com.borland.jbuilder.unittest.JBTestRunner"/>
-  <property category="runtime.2" name="BuildTargetOnRun" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
-  <property category="runtime.2" name="ConfigurationName" value="Windows"/>
-  <property category="runtime.2" name="RunnableType" value="com.borland.jbuilder.runtime.ApplicationRunner"/>
-  <property category="runtime.2" name="application.class" value="viewer.navigator.Viewer"/>
-  <property category="runtime.2" name="application.parameters" value="jdbc:odbc:test &quot;&quot; &quot;&quot;"/>
-  <property category="runtime.2" name="appserver.ejbJarsSaved" value="1"/>
-  <property category="runtime.2" name="appserver.parameters" value=""/>
-  <property category="runtime.2" name="appserver.servername" value=""/>
-  <property category="runtime.2" name="appserver.vmparameters" value=""/>
-  <property category="runtime.2" name="jsprunner.launchuri" value="/"/>
-  <property category="runtime.2" name="server.arguments" value=""/>
-  <property category="runtime.2" name="server.disableServerClassTracing" value="0"/>
-  <property category="runtime.2" name="server.instance.name" value=""/>
-  <property category="runtime.2" name="server.name" value="Tomcat 3.3"/>
-  <property category="runtime.2" name="server.vmparameters" value=""/>
-  <property category="runtime.2" name="test.harness" value="com.borland.jbuilder.unittest.JBTestRunner"/>
-  <property category="sys" name="AuthorLabel" value="@author"/>
   <property category="sys" name="BackupPath" value="../../../tmp"/>
-  <property category="sys" name="BeansInstantiate" value="false"/>
-  <property category="sys" name="BraceStyle" value="0"/>
-  <property category="sys" name="CheckStable" value="1"/>
   <property category="sys" name="Company" value="Sberbank"/>
   <property category="sys" name="CompanyLabel" value="Company:"/>
   <property category="sys" name="Copyright" value="Copyright (c) 2002"/>
   <property category="sys" name="CopyrightLabel" value="Copyright:"/>
-  <property category="sys" name="DefaultPath" value="src"/>
-  <property category="sys" name="Description" value=""/>
-  <property category="sys" name="DescriptionLabel" value="Description:"/>
   <property category="sys" name="DocPath" value=""/>
-  <property category="sys" name="EventMatch" value="false"/>
-  <property category="sys" name="EventStyle" value="1"/>
-  <property category="sys" name="ExcludeClassEnabled" value="0"/>
-  <property category="sys" name="IncludeTestPath" value="1"/>
-  <property category="sys" name="InstanceVisibility" value="0"/>
-  <property category="sys" name="JDK" value="java Blackdown-1.3.1-FCS"/>
-  <property category="sys" name="LastTag" value="0"/>
+  <property category="sys" name="JDK" value="java Blackdown-1.3.1-FCS for JBuilder"/>
   <property category="sys" name="Libraries" value="db2;postgres"/>
-  <property category="sys" name="MakeStable" value="0"/>
   <property category="sys" name="OutPath" value="bin"/>
   <property category="sys" name="SourcePath" value="src"/>
-  <property category="sys" name="TestPath" value="src"/>
-  <property category="sys" name="Title" value="Viewer"/>
-  <property category="sys" name="TitleLabel" value="Title:"/>
-  <property category="sys" name="Version" value="1.0"/>
-  <property category="sys" name="VersionLabel" value="@version"/>
   <property category="sys" name="WorkingDirectory" value="."/>
-  <property category="sys" name="max.package.levels" value="9"/>
   <node name="ViewerJAR" type="Archive">
     <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
     <property category="archiving" name="buildWithProject" value="0"/>
@@ -97,6 +27,7 @@
     <property category="archiving" name="executableFiles.4" value="Viewer-solaris"/>
     <property category="archiving" name="executableFiles.5" value="Viewer-mac"/>
     <property category="archiving" name="libraryStates.1" value="3:postgres"/>
+    <property category="archiving" name="manifestMainClass" value="viewer.navigator.Viewer"/>
     <property category="archiving" name="targetCompressed" value="1"/>
     <property category="archiving" name="targetPath" value="out/viewer.jar"/>
   </node>
