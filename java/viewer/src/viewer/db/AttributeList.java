@@ -1,9 +1,10 @@
 package viewer.db;
 
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import viewer.db.Attribute;
+
 import viewer.util.Util;
 
 /**
@@ -33,6 +34,21 @@ public class AttributeList extends ArrayList {
     for(int i = 1; i <= columnCount; i++) {
       Attribute attribute = new Attribute();
       attribute.fillWith(rsmd, i);
+      add(attribute);
+    }
+  }
+
+  /**
+   * initialize list with data from ResultSet object
+   *
+   * @param rsmd source ResultSet object
+   * @exception SQLException if a database access error occurs
+   */
+  public void fillWith(ResultSet rsmd) throws SQLException {
+    clear();
+    while (rsmd.next()) {
+      Attribute attribute = new Attribute();
+      attribute.fillWith(rsmd);
       add(attribute);
     }
   }

@@ -3,6 +3,7 @@ package viewer.db;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+
 import viewer.util.Util;
 
 /**
@@ -114,46 +115,53 @@ public class MyResultSetMetaData implements ResultSetMetaData {
   public boolean isDefinitelyWritable(int parm1) throws java.sql.SQLException {
     return rsmd.isDefinitelyWritable(parm1);
   }
-  public String getColumnClassName(int parm1) throws java.sql.SQLException {
-    if(classNameImplemented)
-      return rsmd.getColumnClassName(parm1);
-    int type = rsmd.getColumnType(parm1);
-    switch(type){
-      case Types.BIT:
-      case Types.TINYINT:
-      case Types.SMALLINT:
-      case Types.INTEGER:
-      case Types.BIGINT:
-      case Types.NUMERIC:
-      case Types.DECIMAL:
-        return INTEGER_TYPE;
-      case Types.FLOAT:
-      case Types.REAL:
-      case Types.DOUBLE:
-        return DOUBLE_TYPE;
-      case Types.CHAR:
-      case Types.VARCHAR:
-      case Types.LONGVARCHAR:
-        return STRING_TYPE;
-      case Types.JAVA_OBJECT:
-        return OBJECT_TYPE;
-      case Types.TIME:
-      case Types.TIMESTAMP:
-      case Types.DATE:
-        return DATETIME_TYPE;
-      case Types.BINARY:
-      case Types.VARBINARY:
-      case Types.LONGVARBINARY:
-      case Types.NULL:
-      case Types.OTHER:
-      case Types.DISTINCT:
-      case Types.STRUCT:
-      case Types.ARRAY:
-      case Types.BLOB:
-      case Types.CLOB:
-      case Types.REF:
-      default:
-        throw new UnsupportedOperationException("Method getColumnClassName() not yet implemented.");
+  
+    public String getColumnClassName(int parm1) throws java.sql.SQLException {
+	    if (classNameImplemented) {
+	        return rsmd.getColumnClassName(parm1);
+	    }
+	    int type = rsmd.getColumnType(parm1);
+	    return getJavaType(type);
     }
-  }
+    
+    public static String getJavaType(int type) {
+	    switch (type){
+	      case Types.BIT:
+	      case Types.TINYINT:
+	      case Types.SMALLINT:
+	      case Types.INTEGER:
+	      case Types.BIGINT:
+	      case Types.NUMERIC:
+	      case Types.DECIMAL:
+	        return INTEGER_TYPE;
+	      case Types.FLOAT:
+	      case Types.REAL:
+	      case Types.DOUBLE:
+	        return DOUBLE_TYPE;
+	      case Types.CHAR:
+	      case Types.VARCHAR:
+	      case Types.LONGVARCHAR:
+	        return STRING_TYPE;
+	      case Types.JAVA_OBJECT:
+	        return OBJECT_TYPE;
+	      case Types.TIME:
+	      case Types.TIMESTAMP:
+	      case Types.DATE:
+	        return DATETIME_TYPE;
+	      case Types.BINARY:
+	      case Types.VARBINARY:
+	      case Types.LONGVARBINARY:
+	      case Types.NULL:
+	      case Types.OTHER:
+	      case Types.DISTINCT:
+	      case Types.STRUCT:
+	      case Types.ARRAY:
+	      case Types.BLOB:
+	      case Types.CLOB:
+	      case Types.REF:
+	      default:
+	        throw new UnsupportedOperationException("Method getColumnClassName() not yet implemented.");
+	    }
+    }
+
 }

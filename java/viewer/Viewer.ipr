@@ -274,8 +274,8 @@
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
       <expanded_node type="directory" url="file://$PROJECT_DIR$/src/viewer/util" />
-      <expanded_node type="directory" url="file://$PROJECT_DIR$" />
       <expanded_node type="directory" url="file://$PROJECT_DIR$/src" />
+      <expanded_node type="directory" url="file://$PROJECT_DIR$" />
       <expanded_node type="directory" url="file://$PROJECT_DIR$/src/viewer" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="true" />
@@ -308,7 +308,7 @@
   </component>
   <component class="com.intellij.projectRoots.ProjectRootContainer">
     <jdk name="java version &quot;1.3.1&quot;" />
-    <root file="file://$PROJECT_DIR$/classes">
+    <root file="file://$PROJECT_DIR$/bin">
       <property name="type" value="outputPath" />
     </root>
     <root file="jar:///usr/lib/pgsql/jdbc7.0-1.2.jar!/">

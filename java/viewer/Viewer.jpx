@@ -64,7 +64,7 @@
   <property category="sys" name="DefaultPath" value="src"/>
   <property category="sys" name="Description" value=""/>
   <property category="sys" name="DescriptionLabel" value="Description:"/>
-  <property category="sys" name="DocPath" value="doc"/>
+  <property category="sys" name="DocPath" value=""/>
   <property category="sys" name="EventMatch" value="false"/>
   <property category="sys" name="EventStyle" value="1"/>
   <property category="sys" name="ExcludeClassEnabled" value="0"/>
@@ -74,7 +74,7 @@
   <property category="sys" name="LastTag" value="0"/>
   <property category="sys" name="Libraries" value="db2;postgres"/>
   <property category="sys" name="MakeStable" value="0"/>
-  <property category="sys" name="OutPath" value="classes"/>
+  <property category="sys" name="OutPath" value="bin"/>
   <property category="sys" name="SourcePath" value="src"/>
   <property category="sys" name="TestPath" value="src"/>
   <property category="sys" name="Title" value="Viewer"/>
@@ -82,6 +82,7 @@
   <property category="sys" name="Version" value="1.0"/>
   <property category="sys" name="VersionLabel" value="@version"/>
   <property category="sys" name="WorkingDirectory" value="."/>
+  <property category="sys" name="max.package.levels" value="9"/>
   <node name="ViewerJAR" type="Archive">
     <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
     <property category="archiving" name="buildWithProject" value="0"/>

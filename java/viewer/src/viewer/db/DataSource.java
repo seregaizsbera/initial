@@ -95,6 +95,17 @@ public class DataSource {
     return metaData.getTables(null, user, null, types);
   }
 
+	/**
+	 * get list of columns from specified table
+	 *
+	 * @param tableName name of the table
+	 * @return ResultSet object with necessary data
+	 * @exception SQLException if a database access error occurs
+	 */
+	public ResultSet getColumnsForTable(String tableName) throws SQLException {
+		return metaData.getColumns(null, null, tableName, "%");
+	}
+
   /**
    * get data from the specified table for updating
    *

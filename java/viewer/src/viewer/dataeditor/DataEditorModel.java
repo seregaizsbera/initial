@@ -114,6 +114,7 @@ public class DataEditorModel implements ControlProperties {
     closeTable();
     ResultSet rs = data.getTableForUpdating(tableName);
     ResultSetMetaData rsmd = new MyResultSetMetaData(rs.getMetaData());
+    //ResultSet rsmd = data.getColumnsForTable(tableName);
     attributes.fillWith(rsmd);
     rows.fillWith(rs);
     controlAction.putValue(NUMBER_OF_RECORDS, new Integer(getSize()));

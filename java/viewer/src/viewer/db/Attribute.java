@@ -1,11 +1,12 @@
 package viewer.db;
 
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+
 import viewer.util.Util;
 
 /**
@@ -78,6 +79,20 @@ public class Attribute {
     searchable = rsmd.isSearchable(columnIndex);
   }
 
+	void fillWith(ResultSet rsmd) throws SQLException {
+		name = rsmd.getString("COLUMN_NAME");
+		label = rsmd.getString("REMARKS");
+		if (label == null || label.equals("") || label.equalsIgnoreCase("no remarks")) {
+			label = name;
+		}
+		int sqlTypeNumber = rsmd.getInt("DATA_TYPE");
+		type = (String) ATTRIBUTE_SQL_TYPES.get(new Integer(sqlTypeNumber));
+		className = MyResultSetMetaData.getJavaType(sqlTypeNumber);
+		length = rsmd.getInt("COLUMN_SIZE");
+		editable = rsmd.getString("COLUMN_DEF") == null;
+		searchable = true;
+	}
+  
   /**
    * create SQL expression representing the value
    *
