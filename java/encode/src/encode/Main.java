@@ -1,14 +1,11 @@
 package encode;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -32,31 +29,19 @@ public class Main {
 
     private static int usage(int exitValue) {
         PrintStream out = (exitValue == 0) ? System.out : System.err;
-        try {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            Writer output = new OutputStreamWriter(bytes, Param.DEFAULT_OUTPUT_CHARSET);
-            output.write(
-                    bundle.getString("String_1") +
-                    bundle.getString("String_2") +
-                    bundle.getString("String_3") +
-                    bundle.getString("String_4") +
-                    bundle.getString("String_5") +
-                    bundle.getString("String_6") +
-                    bundle.getString("String_7") +
-                    bundle.getString("String_8") +
-                    bundle.getString("String_9") +
-                    bundle.getString("String_10") +
-                    bundle.getString("String_11") +
-                    bundle.getString("String_12") +
-                    bundle.getString("String_13") +
-                    MessageFormat.format(bundle.getString("String_14"), new Object[] { Param.DEFAULT_INPUT_CHARSET, Param.DEFAULT_OUTPUT_CHARSET}));
-            output.close();
-            out.write(bytes.toByteArray());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        out.println(bundle.getString("String_1"));
+        out.println(bundle.getString("String_2"));
+        out.println(bundle.getString("String_3"));
+        out.println(bundle.getString("String_4"));
+        out.println(bundle.getString("String_5"));
+        out.println(bundle.getString("String_6"));
+        out.println(bundle.getString("String_7"));
+        out.println(bundle.getString("String_9"));
+        out.println(bundle.getString("String_10"));
+        out.println(bundle.getString("String_11"));
+        out.println(bundle.getString("String_12"));
+        out.println(bundle.getString("String_13"));
+        out.println(MessageFormat.format(bundle.getString("String_14"), new Object[] { Param.DEFAULT_INPUT_CHARSET, Param.DEFAULT_OUTPUT_CHARSET}));
         return exitValue;
     }
 
