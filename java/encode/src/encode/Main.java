@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 import encode.input.InputStreamMaker;
 import encode.input.InputStreamMakerFactory;
@@ -27,26 +28,28 @@ import encode.translate.TranslatorFactory;
  * @version 1.0
  */
 public class Main {
+    static ResourceBundle bundle = ResourceBundle.getBundle("encode.UsageResourceBundle");
+
     private static int usage(int exitValue) {
         PrintStream out = (exitValue == 0) ? System.out : System.err;
         try {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             Writer output = new OutputStreamWriter(bytes, Param.DEFAULT_OUTPUT_CHARSET);
             output.write(
-                    "Синтаксис: encode [опции] [--] [файл1 файл2...]\n" +
-                    "           encode --help | -h\n" +
-                    "Переводит текстовые файлы из одной кодировки в другую.\n" +
-                    "Используются следующие опции:\n" +
-                    " -s         - перевести файлы в самих себя,\n" +
-                    " -o outfile - результат перевода поместить в outfile,\n" +
-                    " -c(+|-|=)  - изменить формат окончания строк" +
-                    " (\\r, \\n, как есть),\n" +
-                    " -f charset - исходный текст представлен в кодировке charset,\n" +
-                    " -o charset - перевести текст в кодировку charset,\n" +
-                    " --         - означает, что дальше следуют только имена файлов,\n" +
-                    " --help, -h - вывести это сообщение\n" +
-                    "По умолчанию используются следующие значения опций:\n" +
-                    MessageFormat.format(" encode -f {0} -t {1} -o - -c= -- -\n", new Object[] { Param.DEFAULT_INPUT_CHARSET, Param.DEFAULT_OUTPUT_CHARSET}));
+                    bundle.getString("String_1") +
+                    bundle.getString("String_2") +
+                    bundle.getString("String_3") +
+                    bundle.getString("String_4") +
+                    bundle.getString("String_5") +
+                    bundle.getString("String_6") +
+                    bundle.getString("String_7") +
+                    bundle.getString("String_8") +
+                    bundle.getString("String_9") +
+                    bundle.getString("String_10") +
+                    bundle.getString("String_11") +
+                    bundle.getString("String_12") +
+                    bundle.getString("String_13") +
+                    MessageFormat.format(bundle.getString("String_14"), new Object[] { Param.DEFAULT_INPUT_CHARSET, Param.DEFAULT_OUTPUT_CHARSET}));
             output.close();
             out.write(bytes.toByteArray());
         } catch (UnsupportedEncodingException e) {
@@ -68,15 +71,15 @@ public class Main {
             InputStreamMaker inputStreamMaker = new InputStreamMakerFactory().getInputStreamMaker();
             OutputStreamMaker outputStreamMaker = new OutputStreamMakerFactory().getOutputStreamMaker();
             while (inputStreamMaker.hasNext()) {
-            	try {
+                try {
                     InputStream in = inputStreamMaker.getNext();
                     OutputStream out = outputStreamMaker.getNext();
                     translator.translate(in, out);
                     inputStreamMaker.translated();
                     outputStreamMaker.translated();
-            	} catch (FileNotFoundException e) {
-            		System.err.println(MessageFormat.format("encode: {0}", new Object[]{e.getMessage()}));
-            	}
+                } catch (FileNotFoundException e) {
+                    System.err.println(MessageFormat.format("encode: {0}", new Object[]{e.getMessage()}));
+                }
             }
         } catch (InvalidArgsException e) {
             System.err.println("encode: " + e.toString() + ".");

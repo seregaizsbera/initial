@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * <p>Title: Encode</p>
@@ -14,6 +16,7 @@ import java.util.Set;
  * @version 1.0
  */
 public class Param {
+    static ResourceBundle bundle = ResourceBundle.getBundle("encode.UsageResourceBundle");
     private static Param instance;
     public static final String DEFAULT_INPUT_CHARSET;
     public static final String DEFAULT_OUTPUT_CHARSET;
@@ -97,9 +100,9 @@ public class Param {
                     }
                     if (arg.startsWith("-")) {
                         state = B;
-		    } else {
+                    } else {
                         state = C;
-		    }
+                    }
                     break;
                 case B: // разбор опций
                     if (arg == null) {
@@ -112,7 +115,7 @@ public class Param {
                         state = E;
                     } else {
                         state = ERROR;
-	            }
+                    }
                     break;
                 case C: // разбор имен файлов
                     if (arg == null) {
@@ -191,7 +194,7 @@ public class Param {
                             state = HELP;
                         } else {
                             state = UNKNOWN_ERROR;
-			}
+                        }
                         break;
                     case F: // оставшиеся опции - имена файлов
                         if (arg == null) {
@@ -205,27 +208,27 @@ public class Param {
                         helpRequested = true;
                         if (args.length != 1) {
                             state = EXTRA_ARGUMENTS_ERROR;
-			}
+                        }
                         state = LAST;
                         break;
                     case LAST:
                         break loop;
                     case ERROR:
-                        throw new InvalidArgsException("Неправильный аргумент " + arg);
+                        throw new InvalidArgsException(MessageFormat.format(bundle.getString("ILLEGAL_ARGUMENT"), new Object[]{arg}));
                     case EXTRA_ARGUMENTS_ERROR:
-                        throw new InvalidArgsException("Слишком много параметров");
+                        throw new InvalidArgsException(bundle.getString("EXTRA_PARAMETERS"));
                     case ARGUMENT_REQUIRED_ERROR:
-                        throw new InvalidArgsException("Нехватает обязательного аргумента для опции " + arg);
+                        throw new InvalidArgsException(MessageFormat.format(bundle.getString("ARGUMENT_REQUIRED"), new Object[]{arg}));
                     case UNKNOWN_ERROR:
                     default:
-                        throw new InvalidArgsException("Не могу разобрать аргументы командной строки");
+                        throw new InvalidArgsException(bundle.getString("PARSE_ARGUMENTS_ERROR"));
             }
         }
         if (inputFiles.isEmpty() || (inputFiles.size() == 1 && inputFiles.iterator().next().equals("-"))) {
             inputFiles.clear();
             inputMode = CONSOLE_INPUT;
             if (outputMode == SELF_OUTPUT) {
-                throw new InvalidArgsException("Для опции -s требуется указать имена редактируемых файлов");
+                throw new InvalidArgsException(bundle.getString("FILE_NAMES_REQUIRED"));
             }
         } else {
             inputMode = FILE_INPUT;
