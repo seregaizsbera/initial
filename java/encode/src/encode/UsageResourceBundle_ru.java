@@ -11,7 +11,7 @@ public class UsageResourceBundle_ru extends ListResourceBundle {
         { "String_5", " -s           - перевести файлы в самих себя," },
         { "String_6", " -o <outfile> - результат перевода поместить в outfile," },
         { "String_7", " -c(+|-|=)    - изменить формат окончания строк (\\r, \\n, как есть)," },
-        { "String_9", " -f <charset> - исходный текст представлен в кодировке charset,\n" },
+        { "String_9", " -f <charset> - исходный текст представлен в кодировке charset" },
         { "String_10", " -o <charset> - перевести текст в кодировку charset," },
         { "String_11", " --           - означает, что дальше следуют только имена файлов," },
         { "String_12", " --help, -h   - вывести это сообщение" },
