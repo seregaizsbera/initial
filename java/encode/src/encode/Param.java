@@ -7,257 +7,267 @@ import java.util.Set;
 
 /**
  * <p>Title: Encode</p>
- * <p>Description: п÷п╣я─п╣п╡п╬п╢ я┌п╣п╨я│я┌п╟ п╦п╥ п╬п╢п╫п╬п╧ п╨п╬п╢п╦я─п╬п╡п╨п╦ п╡ п╢я─я┐пЁя┐я▌</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: п║п╠п╣я─п╠п╟п╫п╨ п═п╓</p>
- * @author п║п╣я─пЁп╣п╧ п▒п╬пЁп╢п╟п╫п╬п╡
+ * <p>Company: Сбербанк РФ</p>
+ * @author Сергей Богданов
  * @version 1.0
  */
-
 public class Param {
-  private static Param instance = null;
+    private static Param instance;
+    public static final String DEFAULT_INPUT_CHARSET;
+    public static final String DEFAULT_OUTPUT_CHARSET;
 
-  public static final int CONSOLE_OUTPUT = 1;
-  public static final int SELF_OUTPUT    = 2;
-  public static final int FILE_OUTPUT    = 3;
-  public static final int IGNORE_CRLF    = 4;
-  public static final int TO_UNIX_CRLF   = 5;
-  public static final int TO_DOS_CRLF    = 6;
-  public static final int CONSOLE_INPUT  = 7;
-  public static final int FILE_INPUT     = 8;
-
-  private Collection inputFiles;
-  private String outputFile;
-  private int outputMode;
-  private boolean helpRequested;
-  private int crlfMode;
-  private String inputCharset;
-  private String outputCharset;
-  private int inputMode;
-
-  private Param() {
-    inputFiles = new ArrayList();
-    outputFile = null;
-    outputMode = CONSOLE_OUTPUT;
-    helpRequested = false;
-    crlfMode = IGNORE_CRLF;
-    inputCharset = "WINDOWS-1251";
-    outputCharset = "KOI8-R";
-    inputMode = CONSOLE_INPUT;
-  }
-
-  void switchCharsets() {
-    String temp = inputCharset;
-    inputCharset = outputCharset;
-    outputCharset = temp;
-  }
-
-  void parseArgs(String args[]) throws InvalidArgsException {
-    Set argsWithOptions = new HashSet();
-    argsWithOptions.add("-f");
-    argsWithOptions.add("-o");
-    argsWithOptions.add("-t");
-    Set argsWithoutOptions = new HashSet();
-    argsWithoutOptions.add("-s");
-    argsWithoutOptions.add("-c+");
-    argsWithoutOptions.add("-c-");
-    argsWithoutOptions.add("-c=");
-    argsWithoutOptions.add("-h");
-    argsWithoutOptions.add("--help");
-    argsWithoutOptions.add("--");
-    final int START = 0;
-    final int B = 1;
-    final int C = 2;
-    final int D = 3;
-    final int E = 4;
-    final int F = 5;
-    final int ERROR = 9;
-    final int LAST = 10;
-    final int UNKNOWN_ERROR = 11;
-    final int HELP = 12;
-    final int ARGUMENT_REQUIRED_ERROR = 13;
-    final int EXTRA_ARGUMENTS_ERROR = 14;
-    int state = START;
-    int i = 0;
-    loop: while(true) {
-      String arg = (i < args.length) ? args[i] : null;
-      switch(state) {
-        case START:
-          if(arg == null) {
-            state = LAST;
-            break;
-          }
-          if(arg.startsWith("-"))
-            state = B;
-          else
-            state = C;
-          break;
-        case B: // я─п╟п╥п╠п╬я─ п╬п©я├п╦п╧
-          if(arg == null) {
-            state = UNKNOWN_ERROR;
-            break;
-          }
-          if(argsWithOptions.contains(arg))
-            state = D;
-          else if(argsWithoutOptions.contains(arg))
-            state = E;
-          else
-            state = ERROR;
-          break;
-        case C: // я─п╟п╥п╠п╬я─ п╦п╪п╣п╫ я└п╟п╧п╩п╬п╡
-          if(arg == null) {
-            state = LAST;
-            break;
-          }
-          if(arg.equals("--")) {
-            state = F;
-            i++;
-          } else if(arg.startsWith("-"))
-            state = ERROR;
-          else {
-            inputFiles.add(arg);
-            i++;
-          }
-          break;
-        case D: // я─п╟п╥п╠п╬я─ п╬п©я├п╦п╧ я│ п╟я─пЁя┐п╪п╣п╫я┌п╟п╪п╦
-          if(arg == null) {
-            state = UNKNOWN_ERROR;
-            break;
-          }
-          String option = arg;
-          i++;
-          String optionArgument = (i < args.length) ? args[i] : null;
-          if(optionArgument == null) {
-            i--;
-            state = ARGUMENT_REQUIRED_ERROR;
-            break;
-          }
-          if(option.equals("-f")) {
-            inputCharset = optionArgument;
-            i++;
-            state = START;
-          } else if(option.equals("-t")) {
-            outputCharset = optionArgument;
-            i++;
-            state = START;
-          } else if(option.equals("-o")) {
-            if(optionArgument.equals("-")){
-              outputMode = CONSOLE_OUTPUT;
-              outputFile = null;
-            } else {
-              outputFile = optionArgument;
-              outputMode = FILE_OUTPUT;
-            }
-            i++;
-            state = START;
-          }
-          break;
-        case E: // я─п╟п╥п╠п╬я─ п╬п©я├п╦п╧ п╠п╣п╥ п╟я─пЁя┐п╪п╣п╫я┌п╬п╡
-          if(arg == null) {
-            state = UNKNOWN_ERROR;
-            break;
-          }
-          if(arg.equals("--")) {
-            state = F;
-            i++;
-          }
-          else if(arg.equals("-c-")) {
-            crlfMode = TO_DOS_CRLF;
-            i++;
-            state = START;
-          } else if(arg.equals("-c+")) {
-            crlfMode = TO_UNIX_CRLF;
-            i++;
-            state = START;
-          } else if(arg.equals("-c=")) {
-            crlfMode = IGNORE_CRLF;
-            i++;
-            state = START;
-          } else if(arg.equals("-s")) {
-            outputMode = SELF_OUTPUT;
-            i++;
-            state = START;
-          } else if(arg.equals("--help") || arg.equals("-h")) {
-            i++;
-            state = HELP;
-          } else
-            state = UNKNOWN_ERROR;
-          break;
-        case F: // п╬я│я┌п╟п╡я┬п╦п╣я│я▐ п╬п©я├п╦п╦ - п╦п╪п╣п╫п╟ я└п╟п╧п╩п╬п╡
-          if(arg == null) {
-            state = LAST;
-            break;
-          }
-          inputFiles.add(arg);
-          i++;
-          break;
-        case HELP:
-          helpRequested = true;
-          if(args.length != 1)
-            state = EXTRA_ARGUMENTS_ERROR;
-          state = LAST;
-          break;
-        case LAST:
-          break loop;
-        case ERROR:
-          throw new InvalidArgsException("п²п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╧ п╟я─пЁя┐п╪п╣п╫я┌ " + arg);
-        case EXTRA_ARGUMENTS_ERROR:
-          throw new InvalidArgsException("п║п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ п©п╟я─п╟п╪п╣я┌я─п╬п╡");
-        case ARGUMENT_REQUIRED_ERROR:
-          throw new InvalidArgsException("п²п╣я┘п╡п╟я┌п╟п╣я┌ п╬п╠я▐п╥п╟я┌п╣п╩я▄п╫п╬пЁп╬ п╟я─пЁя┐п╪п╣п╫я┌п╟" +
-                                         " п╢п╩я▐ п╬п©я├п╦п╦ " + arg);
-        case UNKNOWN_ERROR:
-        default:
-          throw new InvalidArgsException("п²п╣ п╪п╬пЁя┐ я─п╟п╥п╬п╠я─п╟я┌я▄ п╟я─пЁя┐п╪п╣п╫я┌я▀" +
-                                         " п╨п╬п╪п╟п╫п╢п╫п╬п╧ я│я┌я─п╬п╨п╦");
-      }
+    static {
+        DEFAULT_OUTPUT_CHARSET = System.getProperty("file.encoding", "KOI8-R");
+        if (DEFAULT_OUTPUT_CHARSET.equals("KOI8-R")) {
+            DEFAULT_INPUT_CHARSET = "WINDOWS-1251";
+        } else {
+            DEFAULT_INPUT_CHARSET = "KOI8-R";
+        }
     }
-    if(inputFiles.isEmpty() ||
-       (inputFiles.size() == 1 && inputFiles.iterator().next().equals("-"))) {
-      inputFiles.clear();
-      inputMode = CONSOLE_INPUT;
-      if(outputMode == SELF_OUTPUT)
-        throw new InvalidArgsException("п■п╩я▐ п╬п©я├п╦п╦ -s я┌я─п╣п╠я┐п╣я┌я│я▐ я┐п╨п╟п╥п╟я┌я▄" +
-                                       " п╦п╪п╣п╫п╟ я─п╣п╢п╟п╨я┌п╦я─я┐п╣п╪я▀я┘ я└п╟п╧п╩п╬п╡");
-    } else
-      inputMode = FILE_INPUT;
-  }
 
-  public Collection getInputFiles() {
-    return inputFiles;
-  }
+    public static final int CONSOLE_OUTPUT = 1;
+    public static final int SELF_OUTPUT    = 2;
+    public static final int FILE_OUTPUT    = 3;
+    public static final int IGNORE_CRLF    = 4;
+    public static final int TO_UNIX_CRLF   = 5;
+    public static final int TO_DOS_CRLF    = 6;
+    public static final int CONSOLE_INPUT  = 7;
+    public static final int FILE_INPUT     = 8;
 
-  public String getOutputFile() {
-    return outputFile;
-  }
+    private Collection inputFiles;
+    private String outputFile;
+    private int outputMode;
+    private boolean helpRequested;
+    private int crlfMode;
+    private String inputCharset;
+    private String outputCharset;
+    private int inputMode;
 
-  public int getOutputMode() {
-    return outputMode;
-  }
+    Param() {
+    }
 
-  public int getInputMode() {
-    return inputMode;
-  }
+    private void init() {
+        inputFiles = new ArrayList();
+        outputFile = null;
+        outputMode = CONSOLE_OUTPUT;
+        helpRequested = false;
+        crlfMode = IGNORE_CRLF;
+        inputCharset = DEFAULT_INPUT_CHARSET;
+        outputCharset = DEFAULT_OUTPUT_CHARSET;
+        inputMode = CONSOLE_INPUT;
+    }
 
-  public boolean isHelpRequested() {
-    return helpRequested;
-  }
+    public void parseArgs(String args[]) throws InvalidArgsException {
+        init();
+        Set argsWithOptions = new HashSet();
+        argsWithOptions.add("-f");
+        argsWithOptions.add("-o");
+        argsWithOptions.add("-t");
+        Set argsWithoutOptions = new HashSet();
+        argsWithoutOptions.add("-s");
+        argsWithoutOptions.add("-c+");
+        argsWithoutOptions.add("-c-");
+        argsWithoutOptions.add("-c=");
+        argsWithoutOptions.add("-h");
+        argsWithoutOptions.add("--help");
+        argsWithoutOptions.add("--");
+        final int START = 0;
+        final int B = 1;
+        final int C = 2;
+        final int D = 3;
+        final int E = 4;
+        final int F = 5;
+        final int ERROR = 9;
+        final int LAST = 10;
+        final int UNKNOWN_ERROR = 11;
+        final int HELP = 12;
+        final int ARGUMENT_REQUIRED_ERROR = 13;
+        final int EXTRA_ARGUMENTS_ERROR = 14;
+        int state = START;
+        int i = 0;
+        loop: while (true) {
+            String arg = (i < args.length) ? args[i] : null;
+            switch (state) {
+                case START:
+                    if (arg == null) {
+                        state = LAST;
+                        break;
+                    }
+                    if (arg.startsWith("-")) {
+                        state = B;
+		    } else {
+                        state = C;
+		    }
+                    break;
+                case B: // разбор опций
+                    if (arg == null) {
+                        state = UNKNOWN_ERROR;
+                        break;
+                    }
+                    if (argsWithOptions.contains(arg)) {
+                        state = D;
+                    } else if(argsWithoutOptions.contains(arg)) {
+                        state = E;
+                    } else {
+                        state = ERROR;
+	            }
+                    break;
+                case C: // разбор имен файлов
+                    if (arg == null) {
+                        state = LAST;
+                        break;
+                    }
+                    if (arg.equals("--")) {
+                        state = F;
+                        i++;
+                        } else if (arg.startsWith("-")) {
+                            state = ERROR;
+                        } else {
+                            inputFiles.add(arg);
+                            i++;
+                        }
+                        break;
+                    case D: // разбор опций с аргументами
+                        if (arg == null) {
+                            state = UNKNOWN_ERROR;
+                            break;
+                        }
+                        String option = arg;
+                        i++;
+                        String optionArgument = (i < args.length) ? args[i] : null;
+                        if (optionArgument == null) {
+                            i--;
+                            state = ARGUMENT_REQUIRED_ERROR;
+                            break;
+                        }
+                        if (option.equals("-f")) {
+                            inputCharset = optionArgument;
+                            i++;
+                            state = START;
+                        } else if (option.equals("-t")) {
+                            outputCharset = optionArgument;
+                            i++;
+                            state = START;
+                        } else if (option.equals("-o")) {
+                            if (optionArgument.equals("-")){
+                                outputMode = CONSOLE_OUTPUT;
+                                outputFile = null;
+                            } else {
+                                outputFile = optionArgument;
+                                outputMode = FILE_OUTPUT;
+                            }
+                            i++;
+                            state = START;
+                        }
+                        break;
+                    case E: // разбор опций без аргументов
+                        if (arg == null) {
+                            state = UNKNOWN_ERROR;
+                            break;
+                        }
+                        if (arg.equals("--")) {
+                            state = F;
+                            i++;
+                        } else if (arg.equals("-c-")) {
+                            crlfMode = TO_DOS_CRLF;
+                            i++;
+                            state = START;
+                        } else if (arg.equals("-c+")) {
+                            crlfMode = TO_UNIX_CRLF;
+                            i++;
+                            state = START;
+                        } else if (arg.equals("-c=")) {
+                            crlfMode = IGNORE_CRLF;
+                            i++;
+                            state = START;
+                        } else if (arg.equals("-s")) {
+                            outputMode = SELF_OUTPUT;
+                            i++;
+                            state = START;
+                        } else if (arg.equals("--help") || arg.equals("-h")) {
+                            i++;
+                            state = HELP;
+                        } else {
+                            state = UNKNOWN_ERROR;
+			}
+                        break;
+                    case F: // оставшиеся опции - имена файлов
+                        if (arg == null) {
+                            state = LAST;
+                            break;
+                        }
+                        inputFiles.add(arg);
+                        i++;
+                        break;
+                    case HELP:
+                        helpRequested = true;
+                        if (args.length != 1) {
+                            state = EXTRA_ARGUMENTS_ERROR;
+			}
+                        state = LAST;
+                        break;
+                    case LAST:
+                        break loop;
+                    case ERROR:
+                        throw new InvalidArgsException("Неправильный аргумент " + arg);
+                    case EXTRA_ARGUMENTS_ERROR:
+                        throw new InvalidArgsException("Слишком много параметров");
+                    case ARGUMENT_REQUIRED_ERROR:
+                        throw new InvalidArgsException("Нехватает обязательного аргумента для опции " + arg);
+                    case UNKNOWN_ERROR:
+                    default:
+                        throw new InvalidArgsException("Не могу разобрать аргументы командной строки");
+            }
+        }
+        if (inputFiles.isEmpty() || (inputFiles.size() == 1 && inputFiles.iterator().next().equals("-"))) {
+            inputFiles.clear();
+            inputMode = CONSOLE_INPUT;
+            if (outputMode == SELF_OUTPUT) {
+                throw new InvalidArgsException("Для опции -s требуется указать имена редактируемых файлов");
+            }
+        } else {
+            inputMode = FILE_INPUT;
+        }
+    }
 
-  public int getCrlfMode() {
-    return crlfMode;
-  }
+    public Collection getInputFiles() {
+        return inputFiles;
+    }
 
-  public String getInputCharset() {
-    return inputCharset;
-  }
+    public String getOutputFile() {
+        return outputFile;
+    }
 
-  public String getOutputCharset() {
-    return outputCharset;
-  }
+    public int getOutputMode() {
+        return outputMode;
+    }
 
-  public static Param getInstance() {
-    if(instance == null)
-      instance = new Param();
-    return instance;
-  }
+    public int getInputMode() {
+        return inputMode;
+    }
+
+    public boolean isHelpRequested() {
+        return helpRequested;
+    }
+
+    public int getCrlfMode() {
+        return crlfMode;
+    }
+
+    public String getInputCharset() {
+        return inputCharset;
+    }
+
+    public String getOutputCharset() {
+        return outputCharset;
+    }
+
+    public static Param getInstance() {
+        if (instance == null) {
+            instance = new Param();
+        }
+        return instance;
+    }
 }

@@ -1,43 +1,57 @@
 package encode.translate;
 
-import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 /**
  * <p>Title: Encode</p>
- * <p>Description: п÷п╣я─п╣п╡п╬п╢ я┌п╣п╨я│я┌п╟ п╦п╥ п╬п╢п╫п╬п╧ п╨п╬п╢п╦я─п╬п╡п╨п╦ п╡ п╢я─я┐пЁя┐я▌</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: п║п╠п╣я─п╠п╟п╫п╨ п═п╓</p>
- * @author п║п╣я─пЁп╣п╧ п▒п╬пЁп╢п╟п╫п╬п╡
+ * <p>Company: Сбербанк РФ</p>
+ * @author Сергей Богданов
  * @version 1.0
  */
-
 class SimpleTranslator implements Translator {
-  private final String inputCharset;
-  private final String outputCharset;
+    private final String inputCharset;
+    private final String outputCharset;
 
-  SimpleTranslator(String inputCharset, String outputCharset) {
-    this.inputCharset = inputCharset.toUpperCase();
-    this.outputCharset = outputCharset.toUpperCase();
-  }
+    SimpleTranslator(String inputCharset, String outputCharset) {
+        this.inputCharset = inputCharset.toUpperCase();
+        this.outputCharset = outputCharset.toUpperCase();
+    }
 
-  public void translate(InputStream in, OutputStream out) {
-    if(in == null || out == null)
-      return;
-    byte buf[] = new byte[1024 * 1024];
-    try {
-      int bytesRead = in.read(buf);
-      while(bytesRead > 0) {
-        String strBuf = new String(buf, 0, bytesRead, inputCharset);
-        out.write(strBuf.getBytes(outputCharset));
-        bytesRead = in.read(buf);
-      }
+    public void translate(InputStream in, OutputStream out) {
+        if (in == null || out == null) {
+            return;
+        }
+        try {
+            Reader input = new BufferedReader(new InputStreamReader(in, inputCharset));
+            Writer output = new BufferedWriter(new OutputStreamWriter(out, outputCharset));
+            int previousCharacter = -1;
+            int character = input.read();
+            while (character > 0) {
+                write(output, previousCharacter, character);
+                output.flush();
+                previousCharacter = character;
+                character = input.read();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    catch(IOException e) {
-      e.printStackTrace();
+
+    protected void write(Writer output, int previousCharacter, int character) throws IOException {
+        output.write(character);
     }
-  }
 }
-

@@ -2,98 +2,76 @@ package encode.output;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
+
 import encode.Param;
 
 /**
  * <p>Title: Encode</p>
- * <p>Description: п÷п╣я─п╣п╡п╬п╢ я┌п╣п╨я│я┌п╟ п╦п╥ п╬п╢п╫п╬п╧ п╨п╬п╢п╦я─п╬п╡п╨п╦ п╡ п╢я─я┐пЁя┐я▌</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: п║п╠п╣я─п╠п╟п╫п╨ п═п╓</p>
- * @author п║п╣я─пЁп╣п╧ п▒п╬пЁп╢п╟п╫п╬п╡
+ * <p>Company: Сбербанк РФ</p>
+ * @author Сергей Богданов
  * @version 1.0
  */
-
 class SelfOutputStreamMaker implements OutputStreamMaker {
-  private final Iterator inputFiles;
-  private OutputStream currentStream;
-  private File currentFile;
-  private File currentTempFile;
+    private final Iterator inputFiles;
+    private OutputStream currentStream;
+    private File currentFile;
+    private File currentTempFile;
 
-  private void closeCurrentFile() {
-    try {
-      if(currentStream != null)
-        try {
-          currentStream.close();
+    private void closeCurrentFile() throws IOException {
+        if (currentStream != null) {
+            currentStream.close();
         }
-        catch(IOException e) {
-          e.printStackTrace();
+        if (currentFile == null || currentTempFile == null) {
+            return;
         }
-      if(currentFile == null || currentTempFile == null)
-        return;
-      try {
-        FileOutputStream finalOut = new FileOutputStream(currentFile);
-        FileInputStream finalIn = new FileInputStream(currentTempFile);
+        OutputStream finalOut = new FileOutputStream(currentFile);
+        InputStream finalIn = new FileInputStream(currentTempFile);
         byte buf[] = new byte[1024 * 1024];
-        int bytesRead = 0;
-        do {
-          bytesRead = finalIn.read(buf);
-          finalOut.write(buf, 0, bytesRead);
-        } while(bytesRead == buf.length);
+        int bytesRead = finalIn.read(buf);
+        while (bytesRead > 0) {
+            finalOut.write(buf, 0, bytesRead);
+            bytesRead = finalIn.read(buf);
+        }
+        finalIn.close();
+        finalOut.close();
         currentTempFile.delete();
-      }
-      catch(FileNotFoundException e) {
-        System.err.println("encode: " + e.toString() + ".");
-      }
-      catch(IOException e) {
-        e.printStackTrace();
-      }
+        currentStream = null;
+        currentFile = null;
+        currentTempFile = null;
     }
-    finally {
-      currentStream = null;
-      currentFile = null;
-      currentTempFile = null;
-    }
-  }
 
-  SelfOutputStreamMaker() {
-    Param param = Param.getInstance();
-    inputFiles = param.getInputFiles().iterator();
-    currentStream = null;
-    currentFile = null;
-    currentTempFile = null;
-  }
-
-  public boolean hasNext() {
-    return inputFiles.hasNext();
-  }
-
-  public OutputStream getNext() {
-    closeCurrentFile();
-    if(!hasNext())
-      return null;
-    String fileName = (String)inputFiles.next();
-    currentFile = new File(fileName);
-    currentStream = null;
-    try {
-      currentTempFile = File.createTempFile("encode", currentFile.getName());
-      currentStream = new FileOutputStream(currentTempFile);
-      currentTempFile.deleteOnExit();
+	public boolean hasNext() {
+		return inputFiles.hasNext();
+	}
+	
+    SelfOutputStreamMaker() {
+        Param param = Param.getInstance();
+        inputFiles = param.getInputFiles().iterator();
+        currentStream = null;
+        currentFile = null;
+        currentTempFile = null;
     }
-    catch(FileNotFoundException e) {
-      e.printStackTrace();
-    }
-    catch(IOException e) {
-      e.printStackTrace();
-    }
-    return currentStream;
-  }
 
-  public void translated() {
-    closeCurrentFile();
-  }
+    public OutputStream getNext() throws IOException {
+        closeCurrentFile();
+        if (!hasNext()) {
+            return null;
+        }
+        currentFile = new File((String) inputFiles.next());
+        currentTempFile = File.createTempFile("encode", currentFile.getName());
+        currentTempFile.deleteOnExit();
+        currentStream = new FileOutputStream(currentTempFile);
+        return currentStream;
+    }
+
+    public void translated() throws IOException {
+        closeCurrentFile();
+    }
 }

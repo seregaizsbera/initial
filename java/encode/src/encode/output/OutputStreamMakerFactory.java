@@ -1,35 +1,34 @@
 package encode.output;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import encode.Param;
 
 /**
  * <p>Title: Encode</p>
- * <p>Description: п÷п╣я─п╣п╡п╬п╢ я┌п╣п╨я│я┌п╟ п╦п╥ п╬п╢п╫п╬п╧ п╨п╬п╢п╦я─п╬п╡п╨п╦ п╡ п╢я─я┐пЁя┐я▌</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: п║п╠п╣я─п╠п╟п╫п╨ п═п╓</p>
- * @author п║п╣я─пЁп╣п╧ п▒п╬пЁп╢п╟п╫п╬п╡
+ * <p>Company: Сбербанк РФ</p>
+ * @author Сергей Богданов
  * @version 1.0
  */
-
 public class OutputStreamMakerFactory {
-  private final int mode;
+    private final int mode;
 
-  public OutputStreamMakerFactory() {
-    Param param = Param.getInstance();
-    mode =  param.getOutputMode();
-  }
-
-  public OutputStreamMaker getOutputStreamMaker()
-      throws FileNotFoundException {
-    switch(mode) {
-      case Param.SELF_OUTPUT:
-        return new SelfOutputStreamMaker();
-      case Param.FILE_OUTPUT:
-        return new FileOutputStreamMaker();
-      case Param.CONSOLE_OUTPUT:
-      default:
-        return new ConsoleOutputStreamMaker();
+    public OutputStreamMakerFactory() {
+        Param param = Param.getInstance();
+        mode =  param.getOutputMode();
     }
-  }
+
+    public OutputStreamMaker getOutputStreamMaker() throws IOException {
+        switch (mode) {
+            case Param.SELF_OUTPUT:
+                return new SelfOutputStreamMaker();
+            case Param.FILE_OUTPUT:
+                return new FileOutputStreamMaker();
+            case Param.CONSOLE_OUTPUT:
+            default:
+                return new ConsoleOutputStreamMaker();
+        }
+    }
 }

@@ -2,15 +2,14 @@ package encode;
 
 /**
  * <p>Title: Encode</p>
- * <p>Description: п÷п╣я─п╣п╡п╬п╢ я┌п╣п╨я│я┌п╟ п╦п╥ п╬п╢п╫п╬п╧ п╨п╬п╢п╦я─п╬п╡п╨п╦ п╡ п╢я─я┐пЁя┐я▌</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: п║п╠п╣я─п╠п╟п╫п╨ п═п╓</p>
- * @author п║п╣я─пЁп╣п╧ п▒п╬пЁп╢п╟п╫п╬п╡
+ * <p>Company: Сбербанк РФ</p>
+ * @author Сергей Богданов
  * @version 1.0
  */
-
 class InvalidArgsException extends Exception {
-  InvalidArgsException(String message) {
-    super(message);
-  }
+    InvalidArgsException(String message) {
+        super(message);
+    }
 }

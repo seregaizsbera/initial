@@ -1,32 +1,32 @@
 package encode.input;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
  * <p>Title: Encode</p>
- * <p>Description: п÷п╣я─п╣п╡п╬п╢ я┌п╣п╨я│я┌п╟ п╦п╥ п╬п╢п╫п╬п╧ п╨п╬п╢п╦я─п╬п╡п╨п╦ п╡ п╢я─я┐пЁя┐я▌</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: п║п╠п╣я─п╠п╟п╫п╨ п═п╓</p>
- * @author п║п╣я─пЁп╣п╧ п▒п╬пЁп╢п╟п╫п╬п╡
+ * <p>Company: Сбербанк РФ</p>
+ * @author Сергей Богданов
  * @version 1.0
  */
-
 class ConsoleInputStreamMaker implements InputStreamMaker {
-  private InputStream console;
+    private boolean translated;
 
-  ConsoleInputStreamMaker() {
-    console = System.in;
-  }
+    ConsoleInputStreamMaker() {
+        translated = false;
+    }
 
-  public boolean hasNext() {
-    return console != null;
-  }
+    public boolean hasNext() {
+        return !translated;
+    }
 
-  public InputStream getNext() {
-    return console;
-  }
+    public InputStream getNext() throws IOException {
+        return translated ? null : System.in;
+    }
 
-  public void translated() {
-    console = null;
-  }
+    public void translated() throws IOException {
+        translated = true;
+    }
 }
