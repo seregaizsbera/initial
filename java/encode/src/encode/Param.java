@@ -46,6 +46,12 @@ public class Param {
     inputMode = CONSOLE_INPUT;
   }
 
+  void switchCharsets() {
+    String temp = inputCharset;
+    inputCharset = outputCharset;
+    outputCharset = temp;
+  }
+
   void parseArgs(String args[]) throws InvalidArgsException {
     Set argsWithOptions = new HashSet();
     argsWithOptions.add("-f");

@@ -46,7 +46,7 @@ class FileInputStreamMaker implements InputStreamMaker {
       currentStream = new FileInputStream(inputFile);
     }
     catch(FileNotFoundException e) {
-      System.err.println("encode: " + e.getMessage() + ".");
+      System.err.println("encode: " + e.toString() + ".");
       return null;
     }
     return currentStream;

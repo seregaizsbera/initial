@@ -1,7 +1,17 @@
 package encode;
 
+/**
+ * <p>Title: Encode</p>
+ * <p>Description: Перевод текста из одной кодировки в другую</p>
+ * <p>Copyright: Copyright (c) 2002</p>
+ * <p>Company: Сбербанк РФ</p>
+ * @author unascribed
+ * @version 1.0
+ */
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -21,10 +31,19 @@ import encode.translate.TranslatorFactory;
  * @version 1.0
  */
 
-public class Main {
+public class MainForWindows {
+  private static void printMessage(PrintStream out, String message) {
+    try {
+      out.write(message.getBytes("cp866"));
+    }
+    catch(IOException e) {
+      out.print(message);
+    }
+  }
+
   private static int usage(int exitValue) {
     PrintStream out = (exitValue == 0) ? System.out : System.err;
-    out.print(
+    String message =
         "Синтаксис: encode [опции] [--] [файл1 файл2...]\n" +
         "           encode --help | -h\n" +
         "Переводит текстовые файлы из одной кодировки в другую.\n" +
@@ -38,13 +57,15 @@ public class Main {
         " --         - означает, что дальше следуют только имена файлов,\n" +
         " --help, -h - вывести это сообщение\n" +
         "По умолчанию используются следующие значения опций:\n" +
-        " encode -f windows-1251 -t koi8-r -o - -c= -- -\n");
+        " encode -f koi8-r -t windows-1251 -o - -c= -- -\n";
+    printMessage(out, message);
     return exitValue;
   }
 
   public static void main(String args[]) {
     try {
       Param param = Param.getInstance();
+      param.switchCharsets();
       param.parseArgs(args);
       if(param.isHelpRequested())
         System.exit(usage(0));
@@ -62,7 +83,7 @@ public class Main {
       }
     }
     catch(InvalidArgsException e) {
-      System.err.println("encode: " + e.toString() + ".\n");
+      printMessage(System.err, "encode: " + e.toString() + ".\n");
       System.exit(usage(1));
     }
     catch(UnsupportedEncodingException e) {

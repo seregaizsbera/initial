@@ -47,7 +47,7 @@ class SelfOutputStreamMaker implements OutputStreamMaker {
         currentTempFile.delete();
       }
       catch(FileNotFoundException e) {
-        System.err.println("encode: " + e.getMessage() + ".");
+        System.err.println("encode: " + e.toString() + ".");
       }
       catch(IOException e) {
         e.printStackTrace();
