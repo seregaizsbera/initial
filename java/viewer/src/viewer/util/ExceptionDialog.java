@@ -44,22 +44,23 @@ class ExceptionDialog extends JDialog {
                                }
                               );
 
-    text = new JTextArea();
-    text.setWrapStyleWord(false);
-    text.setLineWrap(false);
-    text.setAutoscrolls(true);
-    text.setEditable(false);
 
     ByteArrayOutputStream writer = new ByteArrayOutputStream();
     PrintStream printer = new PrintStream(writer);
     Util.printException(e, printer);
 
+    text = new JTextArea();
+    text.setWrapStyleWord(false);
+    text.setLineWrap(false);
+    text.setAutoscrolls(true);
+    text.setEditable(false);
     text.setText(writer.toString());
     text.setBackground(getBackground());
-    JScrollPane pane = new JScrollPane(text);
+    text.setCaretPosition(0);
+
     Container panel = getContentPane();
     panel.setLayout(new BorderLayout(10, 10));
-    panel.add(pane, BorderLayout.CENTER);
+    panel.add(new JScrollPane(text), BorderLayout.CENTER);
     JPanel temp = new JPanel(new FlowLayout());
     temp.add(okButton);
     panel.add(temp, BorderLayout.SOUTH);

@@ -53,7 +53,7 @@
   <property category="runtime.2" name="server.vmparameters" value=""/>
   <property category="runtime.2" name="test.harness" value="com.borland.jbuilder.unittest.JBTestRunner"/>
   <property category="sys" name="AuthorLabel" value="@author"/>
-  <property category="sys" name="BackupPath" value="bak"/>
+  <property category="sys" name="BackupPath" value="../../../tmp"/>
   <property category="sys" name="BeansInstantiate" value="false"/>
   <property category="sys" name="BraceStyle" value="0"/>
   <property category="sys" name="CheckStable" value="1"/>
@@ -82,5 +82,21 @@
   <property category="sys" name="Version" value="1.0"/>
   <property category="sys" name="VersionLabel" value="@version"/>
   <property category="sys" name="WorkingDirectory" value="."/>
+  <node name="ViewerJAR" type="Archive">
+    <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
+    <property category="archiving" name="executableEnabled.1" value="1"/>
+    <property category="archiving" name="executableEnabled.2" value="0"/>
+    <property category="archiving" name="executableEnabled.3" value="1"/>
+    <property category="archiving" name="executableEnabled.4" value="0"/>
+    <property category="archiving" name="executableEnabled.5" value="0"/>
+    <property category="archiving" name="executableFiles.1" value="out/viewer.exe"/>
+    <property category="archiving" name="executableFiles.2" value="Viewer.exe"/>
+    <property category="archiving" name="executableFiles.3" value="out/viewer"/>
+    <property category="archiving" name="executableFiles.4" value="Viewer-solaris"/>
+    <property category="archiving" name="executableFiles.5" value="Viewer-mac"/>
+    <property category="archiving" name="libraryStates.1" value="3:postgres"/>
+    <property category="archiving" name="targetCompressed" value="1"/>
+    <property category="archiving" name="targetPath" value="out/viewer.jar"/>
+  </node>
   <file path="src/viewer/db/Attribute.java"/>
 </project>

@@ -147,6 +147,6 @@ class QueryViewerModel extends AbstractTableModel {
   }
 
   public Class getColumnClass(int columnIndex) {
-    return "".getClass();
+    return String.class;
   }
 }

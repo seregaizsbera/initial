@@ -43,8 +43,11 @@ public class RelationWizardModel extends AbstractTableModel {
   }
 
   void clear() {
+    int count = attributes.size();
     attributes.clear();
     attributes.add(0, new Attribute());
+    fireTableRowsDeleted(1, count - 1);
+    fireTableRowsUpdated(0, 0);
   }
   void createTable(String tableName) throws SQLException {
     String sql = "create table " + tableName + " (";

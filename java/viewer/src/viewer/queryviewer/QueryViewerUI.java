@@ -64,6 +64,7 @@ public class QueryViewerUI extends JDialog {
     resultPanel.setColumnSelectionAllowed(false);
     resultPanel.setRowSelectionAllowed(true);
     resultPanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    resultPanel.setToolTipText(null);
     runButton = new JButton(queryController);
     addWindowListener(queryController);
     addComponentListener(queryController);

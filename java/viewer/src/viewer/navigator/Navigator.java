@@ -146,9 +146,9 @@ public class Navigator extends JFrame {
    * close navigator window and exit
    */
   public void close() {
-      data.disconnect();
-      dispose();
-      System.exit(0);
+    data.disconnect();
+    dispose();
+    System.exit(0);
   }
 
   /**
