@@ -7,6 +7,7 @@ import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.*;
 import tickets.controller.SessionAttributes;
 import tickets.model.dat.Flight;
+import tickets.util.Util;
 
 
 /**
@@ -19,14 +20,14 @@ import tickets.model.dat.Flight;
  */
 
 public class FlightsTag extends TagSupport implements SessionAttributes {
-  private void printFlight(Flight flight, PrintWriter out) {
+  private void printFlight(Flight flight, JspWriter out) throws IOException {
     int id = flight.getId();
     out.println("<tr align=\"right\">");
     out.println("<td>" + id + "</td>");
     out.println("<td>" + flight.getDepartureCity() + "</td>");
     out.println("<td>" + flight.getArrivalCity() + "</td>");
-    out.println("<td>" + flight.getDepartureDate() + "</td>");
-    out.println("<td>" + flight.getArrivalDate() + "</td>");
+    out.println("<td>" + flight.getDepartureDate().toString().substring(0, 16) + "</td>");
+    out.println("<td>" + flight.getArrivalDate().toString().substring(0, 16) + "</td>");
     out.println("<td>" + flight.getCompany() + "</td>");
     out.println("<td>" + flight.getPrice1stClass() + "</td>");
     out.println("<td>" + flight.getPrice2ndClass() + "</td>");
@@ -36,34 +37,38 @@ public class FlightsTag extends TagSupport implements SessionAttributes {
   }
 
   public int doStartTag() throws JspException {
-    HttpSession session = pageContext.getSession();
+    try {
+      HttpSession session = pageContext.getSession();
 
-    Writer w = pageContext.getOut();
-    PrintWriter out = new PrintWriter(w);
+      JspWriter out = pageContext.getOut();
 
-    Map flights = (Map)session.getAttribute(FLIGHTS);
-    if(flights == null || flights.isEmpty()) {
-      out.println("<h2>");
-      out.println("Рейсов, удовлетворяющих Вашим условиям, не нашлось.");
-      out.println("</h2>");
-      return SKIP_BODY;
+      Map flights = (Map)session.getAttribute(FLIGHTS);
+      if(flights == null || flights.isEmpty()) {
+        out.println("<h2>");
+        out.println("Рейсов, удовлетворяющих Вашим условиям, не нашлось.");
+        out.println("</h2>");
+        return SKIP_BODY;
+      }
+      out.println("<table>");
+      out.println("<th>Номер рейса</th>");
+      out.println("<th>Взлет</th>");
+      out.println("<th>Посадка</th>");
+      out.println("<th>Взлет</th>");
+      out.println("<th>Посадка</th>");
+      out.println("<th>Компания</th>");
+      out.println("<th>Цена 1-го класса</th>");
+      out.println("<th>Цена 2-го класса</th>");
+      out.println("<th>Самолет</th>");
+      out.println("<th></th>");
+      for(Iterator i = flights.values().iterator(); i.hasNext(); ) {
+        Flight flight = (Flight)i.next();
+        printFlight(flight, out);
+      }
+      out.println("</table>");
     }
-    out.println("<table>");
-    out.println("<th>Номер рейса</th>");
-    out.println("<th>Взлет</th>");
-    out.println("<th>Посадка</th>");
-    out.println("<th>Взлет</th>");
-    out.println("<th>Посадка</th>");
-    out.println("<th>Компания</th>");
-    out.println("<th>Цена 1-го класса</th>");
-    out.println("<th>Цена 2-го класса</th>");
-    out.println("<th>Самолет</th>");
-    out.println("<th></th>");
-    for(Iterator i = flights.values().iterator(); i.hasNext(); ) {
-      Flight flight = (Flight)i.next();
-      printFlight(flight, out);
+    catch(IOException e) {
+      Util.debug(e);
     }
-    out.println("</table>");
     return SKIP_BODY;
   }
 }

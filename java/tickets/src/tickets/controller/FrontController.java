@@ -24,7 +24,7 @@ public class FrontController extends AbstractDispatcher
 
   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String path = request.getServletPath();
-    if(path.endsWith(JSPS_SUFFIX)) {
+    if(!path.endsWith(HTML_SUFFIX)) {
       error("Страница не найдена", HttpServletResponse.SC_NOT_FOUND, request, response);
       return;
     }

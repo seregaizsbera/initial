@@ -2,14 +2,13 @@
 <%@ page contentType="text/html; charset=windows-1251" %>
 <%@ page errorPage="/error/error_page.html" %>
 <%@ taglib uri="cities_tag" prefix="sergey" %>
+<%@ include file="Check.jsp"%>
 <html>
  <head>
   <title>АС Билеты - Поиск рейса</title>
  </head>
  <body>
-  <jsp:include page="/banner.html">
-   <jsp:param name="sessionType" value="clientSession"/>
-  </jsp:include>
+  <jsp:include page="/banner.html"/>
   <h1>Поиск рейса</h1>
   <form method="get" action="/Tickets/action.html">
    <table>

@@ -4,14 +4,13 @@
 <%@ page import="tickets.controller.client.OrderFormParameters" %>
 <%@ page contentType="text/html; charset=windows-1251" %>
 <%@ page errorPage="/error/error_page.html" %>
+<%@ include file="Check.jsp"%>
 <html>
  <head>
   <title>АС Билеты - Заказ</title>
  </head>
  <body>
-  <jsp:include page="/banner.html">
-   <jsp:param name="sessionType" value="clientSession"/>
-  </jsp:include>
+  <jsp:include page="/banner.html"/>
   <h1>Введите параметры заказа</h1>
   <%
     Map flights = (Map)session.getAttribute(SessionAttributes.FLIGHTS);

@@ -46,7 +46,7 @@ public class MakeOrder extends AbstractDispatcher implements OrderFormParameters
       error("Параметры запроса указаны неверно", request, response);
       return;
     }
-    if(creditCard.length() != 20) {
+    if(creditCard.length() != 20 || numberOfPlaces <= 0) {
       error("Параметры запроса указаны неверно", request, response);
       return;
     }

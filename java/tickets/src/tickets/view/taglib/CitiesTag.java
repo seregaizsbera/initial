@@ -2,6 +2,7 @@ package tickets.view.taglib;
 
 import java.io.*;
 import java.util.*;
+import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import tickets.model.dat.City;
 import tickets.util.Util;
@@ -17,14 +18,13 @@ import tickets.controller.SessionAttributes;
  */
 
 public class CitiesTag extends TagSupport implements SessionAttributes {
-  public int doStartTag() throws javax.servlet.jsp.JspException {
+  public int doStartTag() throws JspException {
     try {
       Collection cities = (Collection)pageContext.getSession().getAttribute(CITIES);
       if(cities == null)
         return SKIP_BODY;
       Iterator i = cities.iterator();
-      Writer w = pageContext.getOut();
-      PrintWriter out = new PrintWriter(w);
+      JspWriter out = pageContext.getOut();
       int cnt = 0;
       out.println();
       while(i.hasNext()) {
@@ -37,7 +37,7 @@ public class CitiesTag extends TagSupport implements SessionAttributes {
         out.println("</option>");
       }
     }
-    catch(Exception e) {
+    catch(IOException e) {
       Util.debug(e);
     }
     return SKIP_BODY;

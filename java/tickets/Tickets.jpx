@@ -6,19 +6,25 @@
   <property category="editor.general" name="line_ending.style" value="3"/>
   <property category="idl" name="ProcessIDL" value="false"/>
   <property category="jsp" name="userColors" value="255,200,0:255,255,192:192,192,192:192,192,192:192,192,192:192,192,192:192,192,192:192,192,192:"/>
+  <property category="jspc" name="checkEnabled" value="0"/>
   <property category="optimize.0" name="BuildTargetOnOptimize" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
   <property category="optimize.0" name="OptimizableType" value="com.borland.jbuilder.optimize.IntroOptimizeitProfiler"/>
   <property category="runtime.0" name="BuildTargetOnRun" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
-  <property category="runtime.0" name="ConfigurationName" value="Enter"/>
+  <property category="runtime.0" name="ConfigurationName" value="Default"/>
   <property category="runtime.0" name="RunnableType" value="com.borland.jbuilder.runtime.ServerRunner"/>
+  <property category="runtime.0"
+    name="appserver.addProjectClassPathOnRun" value="1"/>
   <property category="runtime.0" name="appserver.parameters" value=""/>
   <property category="runtime.0" name="appserver.servername" value=""/>
   <property category="runtime.0" name="appserver.vmparameters" value=""/>
   <property category="runtime.0" name="jsp.launchuri" value="/Tickets/index.html"/>
   <property category="runtime.0" name="jsp.searchport" value="0"/>
   <property category="runtime.0" name="jsprunner.launchuri" value="/Tickets/index.html"/>
+  <property category="runtime.0" name="server.addProjectLibrariesOnRun" value="1"/>
+  <property category="runtime.0" name="server.addProjectOutputPathOnRun" value="1"/>
   <property category="runtime.0" name="server.arguments" value=""/>
   <property category="runtime.0" name="server.instance.name" value=""/>
+  <property category="runtime.0" name="server.libraries.1" value="postgres"/>
   <property category="runtime.0" name="server.name" value="Tomcat 4.0"/>
   <property category="runtime.0" name="server.vmparameters" value=""/>
   <property category="runtime.0" name="test.harness" value="com.borland.jbuilder.unittest.JBTestRunner"/>
@@ -67,5 +73,4 @@
     <property category="webapp" name="webinf.include" value="0"/>
   </node>
   <file path="src/tickets.properties"/>
-  <file path="web-jsptaglibrary_1_2.dtd"/>
 </project>

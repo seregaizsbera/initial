@@ -22,7 +22,7 @@ public interface SessionAttributes {
   String SEARCH_FLIGHT_SERVLET = "/client/search_flight.html";
   String MAKE_ORDER_SERVLET = "/client/make_order.html";
 
-  String JSPS_SUFFIX = ".jsp";
+  String HTML_SUFFIX = ".html";
   String ACTION_HTML = "/action.html";
   String ERROR_HTML = "/error/error.html";
   String ADMIN_FLIGHTS_HTML = "/admin/flights.html";
