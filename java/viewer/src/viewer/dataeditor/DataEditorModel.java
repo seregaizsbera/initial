@@ -42,8 +42,9 @@ public class DataEditorModel implements ControlProperties {
   DataEditorModel(DataSource data) {
     this.data = data;
     controlAction = new AbstractAction() {
-                      public void actionPerformed(ActionEvent e) {}
-                    };
+      public void actionPerformed(ActionEvent e) {
+      }
+    };
     rows = new RowList();
     attributes = new AttributeList();
   }
@@ -62,6 +63,7 @@ public class DataEditorModel implements ControlProperties {
     }
     return res;
   }
+
   private String createInsertStatement(Row row) {
     String res = "";
     String fields = "";
@@ -84,6 +86,7 @@ public class DataEditorModel implements ControlProperties {
     Util.debug(res);
     return res;
   }
+
   private String createUpdateStatement(Row row) {
     String res = "";
     int columnCount = attributes.size();
@@ -103,7 +106,7 @@ public class DataEditorModel implements ControlProperties {
   }
 
   protected void finalize() throws java.lang.Throwable {
-    Util.debug(getClass().getName() + ".finalize(" + hashCode() +')');
+    Util.debug(getClass().getName() + ".finalize(" + hashCode() + ')');
     super.finalize();
   }
 
@@ -118,27 +121,35 @@ public class DataEditorModel implements ControlProperties {
     this.tableName = tableName;
     data.releaseTable();
   }
+
   Attribute getAttribute(int index) {
     return attributes.getAttribute(index);
   }
+
   boolean hasPrevious() {
     return rows.hasPrevious();
   }
+
   boolean hasNext() {
     return rows.hasNext();
   }
+
   boolean isEmpty() {
     return rows.isEmpty();
   }
+
   int getPosition() {
     return rows.getPosition();
   }
+
   int getSize() {
     return rows.getSize();
   }
+
   int getColumnCount() {
     return attributes.size();
   }
+
   void addListener(PropertyChangeListener listener) {
     controlAction.addPropertyChangeListener(listener);
   }
@@ -212,7 +223,8 @@ public class DataEditorModel implements ControlProperties {
       sql = createUpdateStatement(newRow);
     try {
       data.execSQL(sql);
-    } catch(SQLException e) {
+    }
+    catch(SQLException e) {
       Util.showException(e);
       return;
     }
@@ -230,7 +242,8 @@ public class DataEditorModel implements ControlProperties {
       Util.debug(sql);
       try {
         data.execSQL(sql);
-      } catch(SQLException e) {
+      }
+      catch(SQLException e) {
         Util.showException(e);
         return;
       }
