@@ -84,6 +84,7 @@
   <property category="sys" name="WorkingDirectory" value="."/>
   <node name="ViewerJAR" type="Archive">
     <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
+    <property category="archiving" name="buildWithProject" value="0"/>
     <property category="archiving" name="executableEnabled.1" value="1"/>
     <property category="archiving" name="executableEnabled.2" value="0"/>
     <property category="archiving" name="executableEnabled.3" value="1"/>
@@ -98,5 +99,4 @@
     <property category="archiving" name="targetCompressed" value="1"/>
     <property category="archiving" name="targetPath" value="out/viewer.jar"/>
   </node>
-  <file path="src/viewer/db/Attribute.java"/>
 </project>

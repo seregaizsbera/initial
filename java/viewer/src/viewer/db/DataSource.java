@@ -91,7 +91,8 @@ public class DataSource {
    */
   public ResultSet getTables() throws SQLException {
     String user = userName == null ? null : userName.toUpperCase();
-    return metaData.getTables(null, user, null, null);
+    String types[] = {"TABLE"};
+    return metaData.getTables(null, user, null, types);
   }
 
   /**
