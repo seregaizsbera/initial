@@ -52,7 +52,7 @@ public class Attribute {
 
   /**
   * Construct the Attribute object from another one
-  */  
+  */
   public Attribute(Attribute a) {
     name = a.name;
     type = a.type;
@@ -89,8 +89,17 @@ public class Attribute {
     if(strValue == null || strValue.equals(""))
       strValue = "null";
     else if(className.equals(MyResultSetMetaData.STRING_TYPE) ||
-            className.equals(MyResultSetMetaData.DATETIME_TYPE))
+            className.equals(MyResultSetMetaData.DATETIME_TYPE)) {
+      strValue.indexOf('\'');
+      char chars[] = strValue.toCharArray();
+      strValue = "";
+      for(int i = 0; i < chars.length; i++) {
+        strValue += chars[i];
+        if(chars[i] == '\'')
+          strValue += chars[i];
+      }
       strValue = "'" + strValue + "'";
+    }
     return strValue;
   }
 
@@ -118,7 +127,7 @@ public class Attribute {
   public String getName() {
     return name;
   }
-  
+
   /**
   * Get the type of column described by this attribute
   *
@@ -127,7 +136,7 @@ public class Attribute {
   public int getSQLType() {
     return ((Integer)ATTRIBUTE_TYPES.get(type)).intValue();
   }
-  
+
   /**
   * Get the type of column described by this attribute
   *
@@ -136,7 +145,7 @@ public class Attribute {
   public String getType() {
     return type;
   }
-  
+
   /**
   * Get the length of SQL type of column described by this attribute
   *
@@ -145,7 +154,7 @@ public class Attribute {
   public int getLength() {
     return length;
   }
-  
+
   /**
   * Get label for column described by this attribute
   *
@@ -155,7 +164,7 @@ public class Attribute {
     String res = label == null ? name : label;
     return res;
   }
-  
+
   /**
   * Get Java class name representing data stored in column
   * described by this attribute
@@ -165,7 +174,7 @@ public class Attribute {
   public String getClassName() {
     return className;
   }
-  
+
   /**
   * Check whether column is updatable
   *
@@ -174,7 +183,7 @@ public class Attribute {
   public boolean isEditable() {
     return editable;
   }
-  
+
   /**
   * Check if column can be used in search criterias
   *
@@ -183,7 +192,7 @@ public class Attribute {
   public boolean isSearchable() {
     return searchable;
   }
-  
+
   /**
   * Set name of the column described by this attribute
   *
@@ -192,7 +201,7 @@ public class Attribute {
   public void setName(String name) {
     this.name = name;
   }
-  
+
   /**
   * Set length of data in the column described by this attribute
   *
@@ -201,7 +210,7 @@ public class Attribute {
   public void setLength(int length) {
     this.length = length;
   }
-  
+
   /**
   * Set type of data in the column described by this attribute
   *
