@@ -21,18 +21,6 @@ import tickets.util.Util;
 
 public class SearchFlight extends AbstractDispatcher
                    implements ActionParameters, SearchFormParameters {
-  private Timestamp createTime(String dateStr, String timeStr, Locale locale) {
-    if(isEmpty(dateStr))
-      return null;
-    if(isEmpty(timeStr))
-      timeStr = "00:00";
-    String newDateStr = dateStr.substring(6, 10) + '-';
-    newDateStr += dateStr.substring(3, 5) + '-';
-    newDateStr += dateStr.substring(0, 2) + ' ';
-    newDateStr += timeStr + ":00.0000";
-    return Timestamp.valueOf(newDateStr);
-  }
-
   protected void service(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
     HttpSession session = request.getSession();
     String sessionType = (String)session.getAttribute(SESSION_TYPE);
@@ -50,30 +38,26 @@ public class SearchFlight extends AbstractDispatcher
     String arrivalDate = request.getParameter(ARRIVAL_DATE);
     String arrivalTime = request.getParameter(ARRIVAL_TIME);
     String arrivalTimeCondition = request.getParameter(ARRIVAL_TIME_CONDITION);
-    if(isEmpty(departureCity) || isEmpty(arrivalCity) ||
-       isEmpty(departureTimeCondition) || isEmpty(arrivalTimeCondition) ||
-       (isEmpty(departureDate) && isEmpty(arrivalDate))) {
+    if((Util.isEmpty(departureCity) || departureCity.equals("0")) &&
+       (Util.isEmpty(arrivalCity) || arrivalCity.equals("0")) &&
+       Util.isEmpty(departureTime) &&
+       Util.isEmpty(arrivalTime) &&
+       Util.isEmpty(departureDate) &&
+       Util.isEmpty(arrivalDate)) {
       error("Ќеправильно указаны параметры поиска.", request, response);
       return;
     }
 
     Locale locale = (Locale)session.getAttribute(LOCALE);
-    Timestamp departureDateTime = null;
-    Timestamp arrivalDateTime = null;
-    try {
-      departureDateTime = createTime(departureDate, departureTime, locale);
-      arrivalDateTime = createTime(arrivalDate, arrivalTime, locale);
-    }
-    catch(Exception e) {
-      error("Ќеправильно указаны параметры поиска.", request, response);
-      return;
-    }
+
     SearchFilter searchFilter = new SearchFilter();
     searchFilter.setDepartureCityId(Integer.parseInt(departureCity));
-    searchFilter.setDepartureTime(departureDateTime);
+    searchFilter.setDepartureDate(departureDate);
+    searchFilter.setDepartureTime(departureTime);
     searchFilter.setDepartureTimeCondition(Integer.parseInt(departureTimeCondition));
     searchFilter.setArrivalCityId(Integer.parseInt(arrivalCity));
-    searchFilter.setArrivalTime(arrivalDateTime);
+    searchFilter.setArrivalDate(arrivalDate);
+    searchFilter.setArrivalTime(arrivalTime);
     searchFilter.setArrivalTimeCondition(Integer.parseInt(arrivalTimeCondition));
 
     FlightListDAO flightListDao = FlightListDAO.getInstance();

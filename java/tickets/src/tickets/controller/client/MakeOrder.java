@@ -6,6 +6,7 @@ import javax.servlet.http.*;
 import tickets.model.dat.Order;
 import tickets.model.dao.OrderDAO;
 import tickets.controller.AbstractDispatcher;
+import tickets.util.Util;
 
 /**
  * <p>Title: Tickets</p>
@@ -29,8 +30,10 @@ public class MakeOrder extends AbstractDispatcher implements OrderFormParameters
     String flightIdStr = request.getParameter(FLIGHT_ID);
     String numberOfPlacesStr = request.getParameter(NUMBER_OF_PLACES);
     String creditCard  = request.getParameter(CREDIT_CARD);
-    if(isEmpty(classStr) || isEmpty(flightIdStr) ||
-       isEmpty(numberOfPlacesStr) || isEmpty(creditCard)) {
+    if(Util.isEmpty(classStr) ||
+       Util.isEmpty(flightIdStr) ||
+       Util.isEmpty(numberOfPlacesStr) ||
+       Util.isEmpty(creditCard)) {
       error("”казаны не все параметры заказа", request, response);
       return;
     }

@@ -1,6 +1,4 @@
-package tickets.view.taglib;
-
-import javax.servlet.jsp.tagext.TagSupport;
+package tickets.controller.admin;
 
 /**
  * <p>Title: Tickets</p>
@@ -11,5 +9,6 @@ import javax.servlet.jsp.tagext.TagSupport;
  * @version 1.0
  */
 
-public class FlightDetailsTag extends TagSupport {
+interface FlightsFormParameters {
+  String FLIGHT_ID = "flight_id";
 }

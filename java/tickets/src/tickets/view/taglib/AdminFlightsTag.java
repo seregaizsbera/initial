@@ -20,18 +20,24 @@ import tickets.controller.SessionAttributes;
 
 public class AdminFlightsTag extends TagSupport implements SessionAttributes {
   private void printFlight(Flight flight, JspWriter out) throws IOException {
-    int id = flight.getId();
-    out.println("<tr align=\"right\">");
-    out.println("<td>" + id + "</td>");
+    out.println("<tr align=right>");
+    out.println("<form action=/Tickets/action.html method=post>");
+    out.println("<td>" + flight.getId() + "</td>");
     out.println("<td>" + flight.getDepartureCity() + "</td>");
     out.println("<td>" + flight.getArrivalCity() + "</td>");
-    out.println("<td>" + flight.getDepartureDate().toString().substring(0, 16) + "</td>");
-    out.println("<td>" + flight.getArrivalDate().toString().substring(0, 16) + "</td>");
+    out.println("<td>" + flight.getDepartureDate() + "<br>" + flight.getDepartureTime() + "</td>");
+    out.println("<td>" + flight.getArrivalDate() + "<br>" + flight.getArrivalTime() + "</td>");
     out.println("<td>" + flight.getCompany() + "</td>");
     out.println("<td>" + flight.getPrice1stClass() + "</td>");
     out.println("<td>" + flight.getPrice2ndClass() + "</td>");
     out.println("<td>" + flight.getAirCraftModel() + "</td>");
-    out.println("<td><a href=\"/Tickets" + ORDER_HTML + "?flight_id=" + id + "\">" + "Сделать заказ" + "</a></td>");
+    out.println("<td>");
+    out.println("<input type=hidden name=flight_id value=" + flight.getId() + ">");
+    out.println("<input type=hidden name=action value=delete>");
+    out.println("<input type=submit value=Удалить onClick=\"return confirm('Вы уверены?')\">");
+    out.println("</td>");
+    out.println("<td><a href=/Tickets/admin/edit_flight.html?flight_id=" + flight.getId() + ">Редактировать</a></td>");
+    out.println("</form>");
     out.println("</tr>");
   }
 
@@ -46,7 +52,7 @@ public class AdminFlightsTag extends TagSupport implements SessionAttributes {
         out.println("</h2>");
         return SKIP_BODY;
       }
-      out.println("<table>");
+      out.println("<table border cellpadding=5>");
       out.println("<th>Номер рейса</th>");
       out.println("<th>Взлет</th>");
       out.println("<th>Посадка</th>");
@@ -57,6 +63,7 @@ public class AdminFlightsTag extends TagSupport implements SessionAttributes {
       out.println("<th>Цена 2-го класса</th>");
       out.println("<th>Самолет</th>");
       out.println("<th></th>");
+      out.println("<td><a href=/Tickets/admin/edit_flight.html>Создать новый</a></td>");
       for(Iterator i = flights.values().iterator(); i.hasNext(); ) {
         Flight flight = (Flight)i.next();
         printFlight(flight, out);

@@ -4,9 +4,9 @@ import java.math.*;
 import java.sql.*;
 import java.util.*;
 import tickets.model.dat.Flight;
-import tickets.util.Util;
 import tickets.model.valueobjects.Currency;
 import tickets.model.dat.SearchFilter;
+import tickets.util.Util;
 
 /**
  * <p>Title: Tickets</p>
@@ -19,45 +19,72 @@ import tickets.model.dat.SearchFilter;
 
 public class FlightListDAO extends AbstractDAO {
   static private FlightListDAO instance = null;
+
   private void populate(ResultSet rs, Flight flight) throws SQLException {
-    flight.setDepartureDate(getTimestamp(rs, "c1"));
-    flight.setArrivalDate(getTimestamp(rs, "c2"));
+    flight.setDepartureDate(getString(rs, "c1"));
+    flight.setArrivalDate(getString(rs, "c2"));
     flight.setDepartureCity(getString(rs, "c3"));
     flight.setArrivalCity(getString(rs, "c4"));
-    flight.setPrice1stClass(new Currency(new BigDecimal(getFloat(rs, 5).doubleValue())));
-    flight.setPrice2ndClass(new Currency(new BigDecimal(getFloat(rs, 6).doubleValue())));
+    flight.setPrice1stClass(new Currency(new BigDecimal(getFloat(rs, "c5").doubleValue())));
+    flight.setPrice2ndClass(new Currency(new BigDecimal(getFloat(rs, "c6").doubleValue())));
     flight.setAirCraftModel(getString(rs, "c7"));
     flight.setCount1stClass(getInt(rs, "c8").intValue());
     flight.setCount2ndClass(getInt(rs, "c9").intValue());
     flight.setCompany(getString(rs, "c10"));
     flight.setId(getInt(rs, "c11").intValue());
+    flight.setIdDepartureCity(getInt(rs, "c12").intValue());
+    flight.setIdArrivalCity(getInt(rs, "c13").intValue());
+    flight.setIdAircraft(getInt(rs, "c14").intValue());
+    flight.setDepartureTime(getString(rs, "c15"));
+    flight.setArrivalTime(getString(rs, "c16"));
   }
 
-  private String makeSqlTimeCondition(String field, Timestamp date, int condition) {
-    if(date == null)
-      return "";
-    String result = " and " + field;
+  private String getSqlBooleanOperator(int condition) {
     switch(condition) {
       case SearchFilter.BEFORE:
-        result += "<=";
-        break;
+        return "<=";
       case SearchFilter.AFTER:
-        result += ">=";
-        break;
+        return ">=";
+      default:
+        return "=";
     }
-    result += '\'' + date.toString() + '\'';
-    return result;
   }
 
   private String makeSqlWhereClause(SearchFilter filter) {
     if(filter == null)
       return "";
-    String result = " where";
-    result += " a.id_departure_city=" + filter.getDepartureCityId();
-    result += " and a.id_arrival_city=" + filter.getArrivalCityId();
-    result += makeSqlTimeCondition("a.date_departure", filter.getDepartureTime(), filter.getDepartureTimeCondition());
-    result += makeSqlTimeCondition("a.date_arrival", filter.getArrivalTime(), filter.getArrivalTimeCondition());
+    String result = " where (1=1)";
+    if(filter.getDepartureCityId() != SearchFilter.NOT_SPECIFIED)
+      result += " and (id_departure_city=?)";
+    if(filter.getArrivalCityId() != SearchFilter.NOT_SPECIFIED)
+      result += " and (id_arrival_city=?)";
+    if(filter.getDepartureDate() != null)
+      result += " and (Date(date_departure)=?)";
+    if(filter.getDepartureTime() != null)
+      result += " and (Time(date_departure)" + getSqlBooleanOperator(filter.getDepartureTimeCondition()) + "?)";
+    if(filter.getArrivalDate() != null)
+      result += " and (Date(date_arrival)=?)";
+    if(filter.getArrivalTime() != null)
+      result += " and (Time(date_arrival)" + getSqlBooleanOperator(filter.getArrivalTimeCondition()) + "?)";
     return result;
+  }
+
+  private void makeStatementParameters(PreparedStatement stmt, SearchFilter filter) throws SQLException {
+    if(filter == null)
+      return;
+    int index = 0;
+    if(filter.getDepartureCityId() != SearchFilter.NOT_SPECIFIED)
+      setInt(stmt, ++index, new Integer(filter.getDepartureCityId()));
+    if(filter.getArrivalCityId() != SearchFilter.NOT_SPECIFIED)
+      setInt(stmt, ++index, new Integer(filter.getArrivalCityId()));
+    if(filter.getDepartureDate() != null)
+      setString(stmt, ++index, filter.getDepartureDate());
+    if(filter.getDepartureTime() != null)
+      setString(stmt, ++index, filter.getDepartureTime());
+    if(filter.getArrivalDate() != null)
+      setString(stmt, ++index, filter.getArrivalDate());
+    if(filter.getArrivalTime() != null)
+      setString(stmt, ++index, filter.getArrivalTime());
   }
 
   protected FlightListDAO() {}
@@ -65,14 +92,13 @@ public class FlightListDAO extends AbstractDAO {
   public Map FindFlights(SearchFilter filter) {
     Connection con = null;
     Map result = new HashMap();
-    Statement stmt = null;
+    PreparedStatement stmt = null;
     ResultSet rs = null;
     try {
       con = getConnection();
-      stmt = con.createStatement();
       String query ="select" +
-                    " a.date_departure as c1," +
-                    " a.date_arrival as c2," +
+                    " date(a.date_departure) as c1," +
+                    " date(a.date_arrival) as c2," +
                     " b.name_city as c3," +
                     " c.name_city as c4," +
                     " a.price_1_class as c5," +
@@ -81,16 +107,23 @@ public class FlightListDAO extends AbstractDAO {
                     " d.count_1_class as c8," +
                     " d.count_2_class as c9," +
                     " e.name_company as c10," +
-                    " a.id_flight as c11" +
+                    " a.id_flight as c11," +
+                    " a.id_departure_city as c12," +
+                    " a.id_arrival_city as c13," +
+                    " a.id_aircraft as c14," +
+                    " time(a.date_departure) as c15," +
+                    " time(a.date_arrival) as c16" +
                     " from flights as a" +
                     " join cities b on a.id_departure_city=b.id_city" +
                     " join cities c on a.id_arrival_city=c.id_city" +
                     " join aircrafts d on a.id_aircraft=d.id_aircraft" +
                     " join companies e on d.id_company=e.id_company";
       query += makeSqlWhereClause(filter);
-      query += " order by a.date_departure";
-      Util.debug("getFlights()", query);
-      rs = stmt.executeQuery(query);
+      stmt = con.prepareStatement(query);
+
+      makeStatementParameters(stmt, filter);
+
+      rs = stmt.executeQuery();
       while(rs.next()) {
         Flight flight = new Flight();
         populate(rs, flight);
@@ -106,9 +139,8 @@ public class FlightListDAO extends AbstractDAO {
   }
 
   static public FlightListDAO getInstance() {
-    if(instance == null) {
+    if(instance == null)
       instance = new FlightListDAO();
-    }
     return instance;
   }
 }

@@ -14,5 +14,8 @@ public interface ActionParameters {
   String LOGIN_ACTION = "login";
   String SEARCH_ACTION = "search";
   String ORDER_ACTION = "order";
+  String DELETE_FLIGHT_ACTION = "delete";
+  String UPDATE_FLIGHT_ACTION = "update";
+  String NEW_FLIGHT_ACTION = "new";
 }
 

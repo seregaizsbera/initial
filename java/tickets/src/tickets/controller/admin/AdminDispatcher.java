@@ -3,8 +3,11 @@ package tickets.controller.admin;
 import java.util.*;
 import javax.servlet.http.*;
 import tickets.controller.AbstractDispatcher;
+import tickets.controller.ActionParameters;
 import tickets.controller.SessionAttributes;
-import tickets.model.dao.*;
+import tickets.model.dao.AircraftListDAO;
+import tickets.model.dao.CitiesListDAO;
+import tickets.model.dao.FlightListDAO;
 
 /**
  * <p>Title: Tickets</p>
@@ -15,7 +18,7 @@ import tickets.model.dao.*;
  * @version 1.0
  */
 
-public class AdminDispatcher extends AbstractDispatcher {
+public class AdminDispatcher extends AbstractDispatcher implements ActionParameters {
   protected void service(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
     HttpSession session = request.getSession();
     String sessionType = (String)session.getAttribute(SESSION_TYPE);
@@ -24,11 +27,29 @@ public class AdminDispatcher extends AbstractDispatcher {
       return;
     }
 
-    FlightListDAO flightListDao = FlightListDAO.getInstance();
-    Map flights = flightListDao.FindFlights(null);
-    session.setAttribute(FLIGHTS, flights);
-
     String nextPage = ADMIN_FLIGHTS_HTML;
+
+    String action = request.getParameter(ACTION);
+
+    if(action == null || action.equals(LOGIN_ACTION)) {
+      FlightListDAO flightListDao = FlightListDAO.getInstance();
+      Map flights = flightListDao.FindFlights(null);
+      session.setAttribute(FLIGHTS, flights);
+
+      CitiesListDAO citiesListDao = CitiesListDAO.getInstance();
+      Collection cities = citiesListDao.getCities();
+      session.setAttribute(CITIES, cities);
+
+      AircraftListDAO aircraftsListDao = AircraftListDAO.getInstance();
+      Collection aircrafts = aircraftsListDao.getAircrafts();
+      session.setAttribute(AIRCRAFTS, aircrafts);
+    } else if(action.equals(DELETE_FLIGHT_ACTION))
+      nextPage = DELETE_FLIGHT_SERVLET;
+    else if(action.equals(UPDATE_FLIGHT_ACTION))
+      nextPage = UPDATE_FLIGHT_SERVLET;
+    else if(action.equals(NEW_FLIGHT_ACTION))
+      nextPage = NEW_FLIGHT_SERVLET;
+
     redirect(nextPage, request, response);
   }
 }

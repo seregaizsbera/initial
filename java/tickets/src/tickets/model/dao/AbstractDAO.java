@@ -1,11 +1,11 @@
 package tickets.model.dao;
 
 import java.io.*;
-import java.math.BigDecimal;
+import java.math.*;
 import java.sql.*;
 import tickets.model.dao.ConnectionSource;
-import tickets.util.Util;
 import tickets.model.valueobjects.Currency;
+import tickets.util.Util;
 
 /**
  * <p>Title: Tickets</p>
@@ -62,15 +62,6 @@ abstract class AbstractDAO {
       throws
   SQLException {
     return DAOUtil.getDate(rs, fieldName);
-  }
-
-  protected static final InputStream getStream(
-      ResultSet rs,
-      String fieldName)
-      throws
-  SQLException,
-  DAOException {
-    return DAOUtil.getStream(rs, fieldName);
   }
 
   protected static final String getString(
@@ -207,7 +198,7 @@ abstract class AbstractDAO {
       return false;
     }
   }
-
+/*
   protected static String makeSqlStringValue(String str) {
     if(str == null || str.equals(""))
       str = "null";
@@ -221,7 +212,7 @@ abstract class AbstractDAO {
     result = "'" + result + "'";
     return result;
   }
-
+*/
   /**
    * Create SQL expression representing condition for record to
    * contain the same value in specified column as strValue
@@ -229,6 +220,7 @@ abstract class AbstractDAO {
    * @param str value from the column
    * @return string representing desired expression in SQL
    */
+/*
   public String makeSqlBooleanValue(String str) {
     str = makeSqlStringValue(str);
     if(str.equals("null"))
@@ -237,6 +229,7 @@ abstract class AbstractDAO {
       str = '=' + str;
     return str;
   }
+*/
   protected static final void setString(
           PreparedStatement pstmt,
           int index,

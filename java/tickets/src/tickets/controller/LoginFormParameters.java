@@ -9,7 +9,7 @@ package tickets.controller;
  * @version 1.0
  */
 
-public interface LoginFormParameters {
+interface LoginFormParameters {
   String USER_NAME = "key";
   String PASSWORD = "value";
 }

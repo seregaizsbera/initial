@@ -5,6 +5,7 @@ import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import tickets.model.dat.City;
+import tickets.model.dat.SearchFilter;
 import tickets.util.Util;
 import tickets.controller.SessionAttributes;
 
@@ -18,6 +19,25 @@ import tickets.controller.SessionAttributes;
  */
 
 public class CitiesTag extends TagSupport implements SessionAttributes {
+  private int selected = SearchFilter.NOT_SPECIFIED;
+  private String without = null;
+
+  public void setSelected(Integer value) {
+    selected = value.intValue();
+  }
+
+  public void setSelected(int value) {
+    selected = value;
+  }
+
+  public void setSelected(String value) {
+    selected = Integer.parseInt(value);
+  }
+
+  public void setWithout(String value) {
+    without = value;
+  }
+
   public int doStartTag() throws JspException {
     try {
       Collection cities = (Collection)pageContext.getSession().getAttribute(CITIES);
@@ -25,12 +45,18 @@ public class CitiesTag extends TagSupport implements SessionAttributes {
         return SKIP_BODY;
       Iterator i = cities.iterator();
       JspWriter out = pageContext.getOut();
-      int cnt = 0;
       out.println();
+      if(!Util.isEmpty(without)) {
+        out.print("<option value=" + SearchFilter.NOT_SPECIFIED);
+        out.print(selected == SearchFilter.NOT_SPECIFIED ? " selected>" : ">");
+        out.print(without);
+        out.println("</option>");
+      }
       while(i.hasNext()) {
         City city = (City)i.next();
-        out.print("<option value=\"" + city.getId() + "\"");
-        if(++cnt == 1)
+        int cityId = city.getId();
+        out.print("<option value=\"" + cityId + "\"");
+        if(cityId == selected)
           out.print(" selected");
         out.print(">");
         out.print(city.getName());

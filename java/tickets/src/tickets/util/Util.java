@@ -10,16 +10,20 @@ package tickets.util;
  */
 
 abstract public class Util {
-  public static void debug(Object o) {
+  static public void debug(Object o) {
     System.err.println(o);
   }
 
-  public static void debug(String source, Object o) {
+  static public void debug(String source, Object o) {
     System.err.print(source + ": ");
     System.err.println(o);
   }
 
-  public static void debug(Throwable e) {
+  static public void debug(Throwable e) {
     e.printStackTrace();
+  }
+
+  static public boolean isEmpty(String str) {
+    return str == null || str.equals("");
   }
 }

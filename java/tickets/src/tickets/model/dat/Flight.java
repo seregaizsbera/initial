@@ -1,7 +1,6 @@
 package tickets.model.dat;
 
-import java.io.Serializable;
-import java.sql.*;
+import java.io.*;
 import tickets.model.valueobjects.Currency;
 
 /**
@@ -14,8 +13,10 @@ import tickets.model.valueobjects.Currency;
  */
 
 public class Flight implements Serializable {
-  private Timestamp departureDate;
-  private Timestamp arrivalDate;
+  private String departureDate;
+  private String arrivalDate;
+  private String departureTime;
+  private String arrivalTime;
   private String departureCity;
   private String arrivalCity;
   private Currency price1stClass;
@@ -25,13 +26,42 @@ public class Flight implements Serializable {
   private int count1stClass;
   private int count2ndClass;
   private int id;
+  private int idDepartureCity;
+  private int idArrivalCity;
+  private int idAircraft;
 
-  public Timestamp getDepartureDate() {
+  private String correctDate(String date) {
+    if(date == null)
+      return null;
+    String result = date;
+    if(date.indexOf("/") != -1)
+      result = date.substring(0, 2) + "." + date.substring(3, 5) + "." + date.substring(6, 10);
+    if(date.indexOf("-") != -1)
+      result = date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4);
+    return result;
+  }
+
+  private String correctTime(String time) {
+    if(time == null)
+      return null;
+    String result = time.substring(0, 5);
+    return result;
+  }
+
+  public String getDepartureDate() {
     return departureDate;
   }
 
-  public Timestamp getArrivalDate() {
+  public String getDepartureTime() {
+    return departureTime;
+  }
+
+  public String getArrivalDate() {
     return arrivalDate;
+  }
+
+  public String getArrivalTime() {
+    return arrivalTime;
   }
 
   public String getDepartureCity() {
@@ -70,12 +100,32 @@ public class Flight implements Serializable {
     return id;
   }
 
-  public void setDepartureDate(Timestamp departureDate) {
-    this.departureDate = departureDate;
+  public int getIdDepartureCity() {
+    return idDepartureCity;
   }
 
-  public void setArrivalDate(Timestamp arrivalDate) {
-    this.arrivalDate = arrivalDate;
+  public int getIdArrivalCity() {
+    return idArrivalCity;
+  }
+
+  public int getIdAircraft() {
+    return idAircraft;
+  }
+
+  public void setDepartureDate(String departureDate) {
+    this.departureDate = correctDate(departureDate);
+  }
+
+  public void setDepartureTime(String departureTime) {
+    this.departureTime = correctTime(departureTime);
+  }
+
+  public void setArrivalDate(String arrivalDate) {
+    this.arrivalDate = correctDate(arrivalDate);
+  }
+
+  public void setArrivalTime(String arrivalTime) {
+    this.arrivalTime = correctTime(arrivalTime);
   }
 
   public void setDepartureCity(String departureCity) {
@@ -112,5 +162,17 @@ public class Flight implements Serializable {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public void setIdDepartureCity(int idDepartureCity) {
+    this.idDepartureCity = idDepartureCity;
+  }
+
+  public void setIdArrivalCity(int idArrivalCity) {
+    this.idArrivalCity = idArrivalCity;
+  }
+
+  public void setIdAircraft(int idAircraft) {
+    this.idAircraft = idAircraft;
   }
 }

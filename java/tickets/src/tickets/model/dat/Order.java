@@ -36,6 +36,13 @@ public class Order {
     return id;
   }
 
+  public String getClassTypeName() {
+    if(classType == 1)
+      return "Первый";
+    else
+      return "Второй";
+  }
+
   public void setFlightId(int flightId) {
     this.flightId = flightId;
   }

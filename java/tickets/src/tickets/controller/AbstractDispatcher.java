@@ -14,10 +14,6 @@ import javax.servlet.http.*;
  */
 
 abstract public class AbstractDispatcher extends HttpServlet implements SessionAttributes {
-  static protected boolean isEmpty(String str) {
-    return str == null || str.equals("");
-  }
-
   protected void error(String message, HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     request.getSession().setAttribute(ERROR_MESSAGE, message);

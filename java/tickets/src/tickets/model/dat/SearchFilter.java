@@ -1,6 +1,7 @@
 package tickets.model.dat;
 
-import java.sql.*;
+import java.util.*;
+import tickets.util.Util;
 
 /**
  * <p>Title: Tickets</p>
@@ -14,20 +15,31 @@ import java.sql.*;
 public class SearchFilter {
   static public final int BEFORE = 1;
   static public final int AFTER = 2;
+  static public final int NOT_SPECIFIED = 0;
 
-  private Timestamp departureTime;
-  private Timestamp arrivalTime;
+  private String departureTime;
+  private String arrivalTime;
+  private String departureDate;
+  private String arrivalDate;
   private int departureCityId;
   private int arrivalCityId;
   private int departureTimeCondition;
   private int arrivalTimeCondition;
 
-  public Timestamp getDepartureTime() {
+  public String getDepartureTime() {
     return departureTime;
   }
 
-  public Timestamp getArrivalTime() {
+  public String getDepartureDate() {
+    return departureDate;
+  }
+
+  public String getArrivalTime() {
     return arrivalTime;
+  }
+
+  public String getArrivalDate() {
+    return arrivalDate;
   }
 
   public int getDepartureCityId() {
@@ -46,12 +58,12 @@ public class SearchFilter {
     return arrivalTimeCondition;
   }
 
-  public void setDepartureTime(Timestamp departureTime) {
-    this.departureTime = departureTime;
+  public void setDepartureTime(String departureTime) {
+    this.departureTime = Util.isEmpty(departureTime) ? null : departureTime;
   }
 
-  public void setArrivalTime(Timestamp arrivalTime) {
-    this.arrivalTime = arrivalTime;
+  public void setArrivalTime(String arrivalTime) {
+    this.arrivalTime = Util.isEmpty(arrivalTime) ? null : arrivalTime;
   }
 
   public void setDepartureCityId(int departureCityId) {
@@ -68,5 +80,13 @@ public class SearchFilter {
 
   public void setArrivalTimeCondition(int arrivalTimeCondition) {
     this.arrivalTimeCondition = arrivalTimeCondition;
+  }
+
+  public void setArrivalDate(String arrivalDate) {
+    this.arrivalDate = Util.isEmpty(arrivalDate) ? null : arrivalDate;
+  }
+
+  public void setDepartureDate(String departureDate) {
+    this.departureDate = Util.isEmpty(departureDate) ? null : departureDate;
   }
 }

@@ -26,8 +26,8 @@ public class FlightsTag extends TagSupport implements SessionAttributes {
     out.println("<td>" + id + "</td>");
     out.println("<td>" + flight.getDepartureCity() + "</td>");
     out.println("<td>" + flight.getArrivalCity() + "</td>");
-    out.println("<td>" + flight.getDepartureDate().toString().substring(0, 16) + "</td>");
-    out.println("<td>" + flight.getArrivalDate().toString().substring(0, 16) + "</td>");
+    out.println("<td>" + flight.getDepartureDate() + "<br>" + flight.getDepartureTime() + "</td>");
+    out.println("<td>" + flight.getArrivalDate() + "<br>" + flight.getArrivalTime() + "</td>");
     out.println("<td>" + flight.getCompany() + "</td>");
     out.println("<td>" + flight.getPrice1stClass() + "</td>");
     out.println("<td>" + flight.getPrice2ndClass() + "</td>");
@@ -49,7 +49,7 @@ public class FlightsTag extends TagSupport implements SessionAttributes {
         out.println("</h2>");
         return SKIP_BODY;
       }
-      out.println("<table>");
+      out.println("<table border cellpadding=5>");
       out.println("<th>Номер рейса</th>");
       out.println("<th>Взлет</th>");
       out.println("<th>Посадка</th>");

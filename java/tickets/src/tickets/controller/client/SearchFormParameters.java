@@ -9,7 +9,7 @@ package tickets.controller.client;
  * @version 1.0
  */
 
-public interface SearchFormParameters {
+interface SearchFormParameters {
   String DEPARTURE_CITY = "departureCity";
   String DEPARTURE_DATE = "departureDate";
   String DEPARTURE_TIME = "departureTime";

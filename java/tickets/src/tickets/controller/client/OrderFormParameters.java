@@ -9,7 +9,7 @@ package tickets.controller.client;
  * @version 1.0
  */
 
-public interface OrderFormParameters {
+interface OrderFormParameters {
   String FLIGHT_ID = "flight_id";
   String CLASS = "class";
   String NUMBER_OF_PLACES = "number_of_places";

@@ -1,4 +1,5 @@
 <%@ page import="java.util.*" %>
+<%@ page import="tickets.model.dat.SearchFilter" %>
 <%@ page contentType="text/html; charset=windows-1251" %>
 <%@ page errorPage="/error/error_page.html" %>
 <%@ taglib uri="cities_tag" prefix="sergey" %>
@@ -16,20 +17,24 @@
     <tr>
      <td align="right">Город вылета:</td>
      <td>
-      <select name="departureCity"><sergey:cities/></select>
+      <select name="departureCity">
+       <sergey:cities without="Не указан"/>
+      </select>
      </td>
      <td></td><td></td>
     </tr>
     <tr>
      <td align="right">Город назначения:</td>
      <td>
-      <select name="arrivalCity"><sergey:cities/></select>
+      <select name="arrivalCity">
+       <sergey:cities without="Не указан"/>
+      </select>
      </td>
      <td></td><td></td>
     </tr>
     <tr>
      <td align="right">День вылета (дд.мм.гггг):</td>
-     <td><input type="text" name="departureDate" value="17.07.2000"  maxlength="10" size="10"></td>
+     <td><input type="text" name="departureDate" maxlength="10" size="10"></td>
      <td align="right">Время вылета (чч:мм):</td>
      <td>
       <select name="departureTimeCondition">

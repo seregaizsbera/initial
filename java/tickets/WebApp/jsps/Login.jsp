@@ -28,7 +28,7 @@
       <input type=submit value="Начать работу">
      </td>
      <td>
-      <input type=reset value="Reset">
+      <input type=reset value="Сброс">
      </td>
     </tr>
    </table>

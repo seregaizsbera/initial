@@ -2,14 +2,13 @@
 <%@ page import="tickets.model.dat.Order" %>
 <%@ page errorPage="/error/error_page.html" %>
 <%@ page contentType="text/html; charset=windows-1251" %>
+<%@ include file="Check.jsp"%>
 <html>
  <head>
   <title>АС Билеты - Заказ сделан</title>
  </head>
  <body>
-  <jsp:include page="/banner.html">
-   <jsp:param name="sessionType" value="clientSession"/>
-  </jsp:include>
+  <jsp:include page="/banner.html"/>
   <h1>Заказ сделан</h1>
   <%
     Order order = (Order)request.getAttribute(SessionAttributes.ORDER);

@@ -31,7 +31,7 @@ public class LoginDispatcher extends AbstractDispatcher implements LoginFormPara
     }
     String passwd = request.getParameter(PASSWORD);
     int password = passwd == null ? 0 : passwd.hashCode();
-    if(userName.equals(param.getAdminName())) {
+    if(userName.equalsIgnoreCase(param.getAdminName())) {
       if(password != param.getAdminPassword()) {
         error("Ќеправильное им€ пользовател€ или пароль", request, response);
         return;
