@@ -9,8 +9,9 @@ import java.io.Serializable;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс Aircraft содержит данные о рейсе
  */
-
 public class Aircraft implements Serializable {
   private int id;
   private String model;

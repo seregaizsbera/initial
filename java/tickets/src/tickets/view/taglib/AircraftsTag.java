@@ -1,9 +1,12 @@
 package tickets.view.taglib;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
 import tickets.model.dat.Aircraft;
 import tickets.util.Util;
 import tickets.controller.SessionAttributes;
@@ -15,8 +18,9 @@ import tickets.controller.SessionAttributes;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс AircraftsTag обрабатывает пользовательский тэг aircrafts
  */
-
 public class AircraftsTag extends TagSupport implements SessionAttributes {
   private int selected = 0;
 
@@ -34,7 +38,8 @@ public class AircraftsTag extends TagSupport implements SessionAttributes {
 
   public int doStartTag() throws JspException {
     try {
-      Collection aircrafts = (Collection)pageContext.getSession().getAttribute(AIRCRAFTS);
+      HttpSession session = pageContext.getSession();
+      Collection aircrafts = (Collection)session.getAttribute(AIRCRAFTS);
       if(aircrafts == null)
         return SKIP_BODY;
       Iterator i = aircrafts.iterator();

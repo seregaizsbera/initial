@@ -7,8 +7,9 @@ package tickets.controller.admin;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Набор названий параметров, получаемых из формы просмотра списка рейсов
  */
-
 interface FlightsFormParameters {
-  String FLIGHT_ID = "flight_id";
+  String FLIGHT_ID = "flightId";
 }

@@ -1,8 +1,10 @@
 package tickets.controller.client;
 
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import tickets.controller.AbstractDispatcher;
 import tickets.controller.ActionParameters;
 import tickets.model.dao.CitiesListDAO;
@@ -15,11 +17,20 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ *  ласс ClientDispatcher обрабатывает запросы пользовател€, полученные в режиме
+ * работы с клиентом
  */
-
-public class ClientDispatcher extends AbstractDispatcher implements ActionParameters {
-  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    HttpSession session = request.getSession();
+public class ClientDispatcher extends AbstractDispatcher
+    implements ActionParameters {
+  protected void service(HttpServletRequest request,
+                         HttpServletResponse response)
+      throws ServletException, IOException {
+    HttpSession session = request.getSession(false);
+    if(session == null) {
+      error("—траница устарела", request, response);
+      return;
+    }
     String sessionType = (String)session.getAttribute(SESSION_TYPE);
     if(sessionType != CLIENT_SESSION) {
       error("—траница устарела", request, response);

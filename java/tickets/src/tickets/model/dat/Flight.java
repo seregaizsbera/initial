@@ -1,6 +1,7 @@
 package tickets.model.dat;
 
-import java.io.*;
+import tickets.model.dao.FreePlacesDAO;
+import java.io.Serializable;
 import tickets.model.valueobjects.Currency;
 
 /**
@@ -10,8 +11,9 @@ import tickets.model.valueobjects.Currency;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс Flight содержит данные о рейсе
  */
-
 public class Flight implements Serializable {
   private String departureDate;
   private String arrivalDate;
@@ -29,15 +31,18 @@ public class Flight implements Serializable {
   private int idDepartureCity;
   private int idArrivalCity;
   private int idAircraft;
+  private int numbersOfFreePlaces[] = new int[2];
 
   private String correctDate(String date) {
     if(date == null)
       return null;
     String result = date;
     if(date.indexOf("/") != -1)
-      result = date.substring(0, 2) + "." + date.substring(3, 5) + "." + date.substring(6, 10);
+      result = date.substring(0, 2) + "." + date.substring(3, 5) + "." +
+               date.substring(6, 10);
     if(date.indexOf("-") != -1)
-      result = date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4);
+      result = date.substring(8, 10) + "." + date.substring(5, 7) + "." +
+               date.substring(0, 4);
     return result;
   }
 
@@ -174,5 +179,19 @@ public class Flight implements Serializable {
 
   public void setIdAircraft(int idAircraft) {
     this.idAircraft = idAircraft;
+  }
+
+  public void setClassOfFreePlaces(int placesClass) {
+    FreePlacesDAO freePlacesDAO = FreePlacesDAO.getInstance();
+    numbersOfFreePlaces[placesClass - 1] =
+        freePlacesDAO.getNumberOfFreePlaces(placesClass, id);
+  }
+
+  public int getNumberOfFreePlaces1stClass() {
+    return numbersOfFreePlaces[0];
+  }
+
+  public int getNumberOfFreePlaces2ndClass() {
+    return numbersOfFreePlaces[1];
   }
 }

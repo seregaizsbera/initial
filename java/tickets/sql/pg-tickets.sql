@@ -4,11 +4,6 @@ DROP TABLE aircrafts;
 DROP TABLE cities;
 DROP TABLE companies; 
 
-CREATE FUNCTION timestamp(varchar(14), varchar(14))
-    RETURNS timestamp
-    AS 'SELECT to_timestamp(textcat(textcat(text($1), \' \'), text($2)), \'DD.MM.YYYY HH:MI:SS\')'
-    LANGUAGE 'sql';
-
 CREATE TABLE cities (
   id_city SERIAL,
   name_city varchar(20) NOT NULL,

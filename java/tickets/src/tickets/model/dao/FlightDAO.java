@@ -1,6 +1,9 @@
 package tickets.model.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import tickets.model.dat.Flight;
 import tickets.util.Util;
 
@@ -9,10 +12,11 @@ import tickets.util.Util;
  * <p>Description: Tickets Ordering System</p>
  * <p>Copyright: Copyright (c) 2002</p>
  * <p>Company: Sberbank</p>
- * @author
+ * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс FlightDAO позволяет получить доступ к рейсу на уровне базы данных
  */
-
 public class FlightDAO extends AbstractDAO {
   static private FlightDAO instance = null;
 
@@ -24,27 +28,41 @@ public class FlightDAO extends AbstractDAO {
     flight.setCount1stClass(getInt(rs, "c5").intValue());
     flight.setCount2ndClass(getInt(rs, "c6").intValue());
     flight.setCompany(getString(rs, "c7"));
+    flight.setDepartureTime(getString(rs, "c8"));
+    flight.setArrivalTime(getString(rs, "c9"));
   }
 
-  private void loadLinkedData(Connection con, Flight flight, String whereFlightId) throws SQLException {
-    String query = "select" +
-                   " a.id_flight as c1," +
-                   " b.name_city as c2," +
-                   " c.name_city as c3," +
-                   " d.model as c4," +
-                   " d.count_1_class as c5," +
-                   " d.count_2_class as c6," +
-                   " e.name_company as c7" +
-                   " from flights as a" +
-                   " join cities as b on a.id_departure_city=b.id_city" +
-                   " join cities as c on a.id_arrival_city=c.id_city" +
-                   " join aircrafts as d on a.id_aircraft=d.id_aircraft" +
-                   " join companies as e on d.id_company=e.id_company" +
-                   " where a.id_flight=" + whereFlightId;
-    PreparedStatement stmt = con.prepareStatement(query);
-    ResultSet rs = stmt.executeQuery();
-    rs.next();
-    populate(rs, flight);
+  private void loadLinkedData(Connection con,
+                              Flight flight,
+                              String whereFlightId) throws SQLException {
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    try {
+      String query = "select" +
+                     " a.id_flight as c1," +
+                     " b.name_city as c2," +
+                     " c.name_city as c3," +
+                     " d.model as c4," +
+                     " d.count_1_class as c5," +
+                     " d.count_2_class as c6," +
+                     " e.name_company as c7," +
+                     " time(a.date_departure) as c8," +
+                     " time(a.date_arrival) as c9" +
+                     " from flights as a" +
+                     " join cities as b on a.id_departure_city=b.id_city" +
+                     " join cities as c on a.id_arrival_city=c.id_city" +
+                     " join aircrafts as d on a.id_aircraft=d.id_aircraft" +
+                     " join companies as e on d.id_company=e.id_company" +
+                     " where a.id_flight=" + whereFlightId;
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      rs.next();
+      populate(rs, flight);
+    }
+    finally {
+      close(rs);
+      close(stmt);
+    }
   }
 
   protected FlightDAO() {}
@@ -54,15 +72,22 @@ public class FlightDAO extends AbstractDAO {
     PreparedStatement stmt = null;
     try {
       con = getConnection();
-      String query = "insert into flights" +
-                     " (date_departure, date_arrival, id_departure_city, id_arrival_city, id_aircraft, price_1_class, price_2_class)"+
-                     " values (" +
-                     " Timestamp(cast(? as varchar(14)), cast(? as varchar(14)))," +
-                     " Timestamp(cast(? as varchar(14)), cast(? as varchar(14)))," +
-                     " ?, ?, ?, ?, ?)";
+      String query =
+          "insert into flights" +
+          " (date_departure" +
+          ", date_arrival" +
+          ", id_departure_city" +
+          ", id_arrival_city" +
+          ", id_aircraft" +
+          ", price_1_class" +
+          ", price_2_class)"+
+          " values (" +
+          " Timestamp(cast(? as varchar(14)), cast(? as varchar(14)))," +
+          " Timestamp(cast(? as varchar(14)), cast(? as varchar(14)))," +
+          " ?, ?, ?, ?, ?)";
       stmt = con.prepareStatement(query);
       setString(stmt, 1, flight.getDepartureDate());
-      setString(stmt, 2, flight.getArrivalTime());
+      setString(stmt, 2, flight.getDepartureTime());
       setString(stmt, 3, flight.getArrivalDate());
       setString(stmt, 4, flight.getArrivalTime());
       setInt(stmt, 5, new Integer(flight.getIdDepartureCity()));
@@ -77,6 +102,7 @@ public class FlightDAO extends AbstractDAO {
       Util.debug("FlightDAO::insert()", e);
       throw new DAOException(e);
     } finally {
+      close(stmt);
       close(con);
     }
   }
@@ -96,6 +122,7 @@ public class FlightDAO extends AbstractDAO {
       Util.debug("FlightDAO::remove()", e);
       throw new DAOException(e);
     } finally {
+      close(stmt);
       close(con);
     }
   }
@@ -106,8 +133,10 @@ public class FlightDAO extends AbstractDAO {
     try {
       con = getConnection();
       String query = "update flights set" +
-                     "  date_departure=Timestamp(cast(? as varchar(14)), cast(? as varchar(14)))" +
-                     ", date_arrival=Timestamp(cast(? as varchar(14)), cast(? as varchar(14)))" +
+                     "  date_departure=Timestamp(cast(? as varchar(14))," +
+                                                   " cast(? as varchar(14)))" +
+                     ", date_arrival=Timestamp(cast(? as varchar(14))," +
+                                                   " cast(? as varchar(14)))" +
                      ", id_departure_city=?" +
                      ", id_arrival_city=?" +
                      ", id_aircraft=?" +
@@ -131,6 +160,7 @@ public class FlightDAO extends AbstractDAO {
       Util.debug("FlightDAO::update()", e);
       throw new DAOException(e);
     } finally {
+      close(stmt);
       close(con);
     }
   }

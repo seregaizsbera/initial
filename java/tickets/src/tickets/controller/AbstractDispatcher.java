@@ -1,8 +1,10 @@
 package tickets.controller;
 
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>Title: Tickets</p>
@@ -11,21 +13,31 @@ import javax.servlet.http.*;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс AbstractDispatcher предоставляет полезные методы сервлетам,
+ * которые его наследуют
  */
-
-abstract public class AbstractDispatcher extends HttpServlet implements SessionAttributes {
-  protected void error(String message, HttpServletRequest request, HttpServletResponse response)
+abstract public class AbstractDispatcher extends HttpServlet
+    implements SessionAttributes {
+  protected void error(String message,
+                       HttpServletRequest request,
+                       HttpServletResponse response)
       throws IOException, ServletException {
-    request.getSession().setAttribute(ERROR_MESSAGE, message);
+    request.setAttribute(ERROR_MESSAGE, message);
     redirect(ERROR_HTML, request, response);
   }
 
-  protected void error(String message, int status, HttpServletRequest request, HttpServletResponse response)
+  protected void error(String message,
+                       int status,
+                       HttpServletRequest request,
+                       HttpServletResponse response)
       throws IOException, ServletException {
     response.sendError(status, message);
   }
 
-  protected void redirect(String nextPage, HttpServletRequest request, HttpServletResponse response)
+  protected void redirect(String nextPage,
+                          HttpServletRequest request,
+                          HttpServletResponse response)
     throws IOException, ServletException {
     request.getRequestDispatcher(nextPage).forward(request, response);
   }

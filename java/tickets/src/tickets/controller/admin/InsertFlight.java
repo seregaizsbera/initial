@@ -1,13 +1,15 @@
 package tickets.controller.admin;
 
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import tickets.controller.AbstractDispatcher;
 import tickets.model.dao.FlightDAO;
 import tickets.model.dat.Flight;
+import tickets.model.dat.FlightsBean;
 import tickets.model.valueobjects.Currency;
 import tickets.util.Util;
 
@@ -18,10 +20,19 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ *  ласс InsertFlight обрабатывает запрос пользовател€ на создание нового рейса
  */
-
-public class NewFlight extends AbstractDispatcher implements EditFlightFormParameters {
-  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class InsertFlight extends AbstractDispatcher
+    implements EditFlightFormParameters {
+  protected void service(HttpServletRequest request,
+                         HttpServletResponse response)
+      throws ServletException, IOException {
+    HttpSession session = request.getSession(false);
+    if(session == null) {
+      error("—траница устарела", request, response);
+      return;
+    }
     String departureDate = request.getParameter(DEPARTURE_DATE);
     String departureTime = request.getParameter(DEPARTURE_TIME);
     String arrivalDate = request.getParameter(ARRIVAL_DATE);
@@ -49,6 +60,11 @@ public class NewFlight extends AbstractDispatcher implements EditFlightFormParam
     int aircraftId = Integer.parseInt(aircraftIdStr);
     Currency price1stClass = new Currency(new BigDecimal(price1stClassStr));
     Currency price2ndClass = new Currency(new BigDecimal(price2ndClassStr));
+    if(price1stClass.getCurrency().signum() <= 0 ||
+       price2ndClass.getCurrency().signum() <= 0) {
+      error("Ќеправильно заданы параметры рейса", request, response);
+      return;
+    }
 
     Flight flight = new Flight();
     flight.setDepartureDate(departureDate);
@@ -64,8 +80,8 @@ public class NewFlight extends AbstractDispatcher implements EditFlightFormParam
     FlightDAO flightDao = FlightDAO.getInstance();
     flightDao.create(flight);
 
-    Map flights = (Map)request.getSession().getAttribute(FLIGHTS);
-    flights.put(new Integer(flight.getId()), flight);
+    FlightsBean flights = (FlightsBean)session.getAttribute(FLIGHTS);
+    flights.setNewFlight(flight);
 
     String nextPage = ADMIN_FLIGHTS_HTML;
     redirect(nextPage, request, response);

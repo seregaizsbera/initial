@@ -1,13 +1,15 @@
 package tickets.controller.admin;
 
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import tickets.controller.AbstractDispatcher;
 import tickets.model.dao.FlightDAO;
 import tickets.model.dat.Flight;
+import tickets.model.dat.FlightsBean;
 import tickets.model.valueobjects.Currency;
 import tickets.util.Util;
 
@@ -18,10 +20,19 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * UpdateFlight обрабатывает запрос пользователя на обновление данных о рейсе
  */
-
-public class UpdateFlight extends AbstractDispatcher implements EditFlightFormParameters {
-  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class UpdateFlight extends AbstractDispatcher
+    implements EditFlightFormParameters {
+  protected void service(HttpServletRequest request,
+                         HttpServletResponse response)
+      throws ServletException, IOException {
+    HttpSession session = request.getSession(false);
+    if(session == null) {
+      error("Страница устарела", request, response);
+      return;
+    }
     String flightIdStr = request.getParameter(FLIGHT_ID);
     String departureDate = request.getParameter(DEPARTURE_DATE);
     String departureTime = request.getParameter(DEPARTURE_TIME);
@@ -51,10 +62,13 @@ public class UpdateFlight extends AbstractDispatcher implements EditFlightFormPa
     int aircraftId = Integer.parseInt(aircraftIdStr);
     Currency price1stClass = new Currency(new BigDecimal(price1stClassStr));
     Currency price2ndClass = new Currency(new BigDecimal(price2ndClassStr));
-
-    Map flights = (Map)request.getSession().getAttribute(FLIGHTS);
-    Flight flight = (Flight)flights.get(new Integer(flightId));
-
+    if(price1stClass.getCurrency().signum() <= 0 ||
+       price2ndClass.getCurrency().signum() <= 0) {
+      error("Неправильно заданы параметры рейса", request, response);
+      return;
+    }
+    Flight flight = new Flight();
+    flight.setId(flightId);
     flight.setDepartureDate(departureDate);
     flight.setDepartureTime(departureTime);
     flight.setArrivalDate(arrivalDate);
@@ -67,9 +81,11 @@ public class UpdateFlight extends AbstractDispatcher implements EditFlightFormPa
 
     FlightDAO flightDao = FlightDAO.getInstance();
     flightDao.update(flight);
+    FlightsBean flights = (FlightsBean)session.getAttribute(FLIGHTS);
+    flights.setNewFlight(flight);
 
     String nextPage = ADMIN_FLIGHTS_HTML;
     redirect(nextPage, request, response);
-    response.getWriter().print("<h1>UpdateFlight</h1>");
   }
 }
+

@@ -7,10 +7,11 @@ package tickets.controller.admin;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Набор названий параметров, получаемых из формы редактирования рейса
  */
-
 interface EditFlightFormParameters {
-  String FLIGHT_ID = "flight_id";
+  String FLIGHT_ID = "flightId";
   String DEPARTURE_DATE = "departure_date";
   String DEPARTURE_TIME = "departure_time";
   String ARRIVAL_DATE = "arrival_date";

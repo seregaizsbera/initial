@@ -7,8 +7,9 @@ package tickets.controller.client;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Набор названий параметров, получаемых из формы поиска рейсов
  */
-
 interface SearchFormParameters {
   String DEPARTURE_CITY = "departureCity";
   String DEPARTURE_DATE = "departureDate";

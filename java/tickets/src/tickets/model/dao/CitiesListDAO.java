@@ -1,7 +1,11 @@
 package tickets.model.dao;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Collection;
 import tickets.model.dat.City;
 import tickets.util.Util;
 
@@ -12,8 +16,10 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс CitiesListDAO позволяет получить список городов из
+ * базы данных
  */
-
 public class CitiesListDAO extends AbstractDAO {
   private final String ID_CITY = "ID_CITY";
   private final String NAME_CITY = "NAME_CITY";
@@ -29,14 +35,15 @@ public class CitiesListDAO extends AbstractDAO {
   public Collection getCities() {
     Connection con = null;
     ArrayList result = new ArrayList();
-    Statement stmt = null;
+    PreparedStatement stmt = null;
     ResultSet rs = null;
     try {
+      String query = "select ID_CITY as " + ID_CITY +
+                     ", NAME_CITY as " + NAME_CITY +
+                     " from cities order by NAME_CITY";
       con = getConnection();
-      stmt = con.createStatement();
-      rs = stmt.executeQuery("select ID_CITY as " + ID_CITY +
-                             ", NAME_CITY as " + NAME_CITY +
-                             " from cities order by NAME_CITY");
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
       while(rs.next()) {
         City city = new City();
         populate(rs, city);
@@ -46,6 +53,8 @@ public class CitiesListDAO extends AbstractDAO {
       Util.debug("getCities()", e);
       throw new DAOException(e);
     } finally {
+      close(rs);
+      close(stmt);
       close(con);
     }
     return result;

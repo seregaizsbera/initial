@@ -1,9 +1,12 @@
 package tickets.view.taglib;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
 import tickets.model.dat.City;
 import tickets.model.dat.SearchFilter;
 import tickets.util.Util;
@@ -16,8 +19,9 @@ import tickets.controller.SessionAttributes;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс CitiesTag обрабатывает пользовательский тэг cities
  */
-
 public class CitiesTag extends TagSupport implements SessionAttributes {
   private int selected = SearchFilter.NOT_SPECIFIED;
   private String without = null;
@@ -40,7 +44,8 @@ public class CitiesTag extends TagSupport implements SessionAttributes {
 
   public int doStartTag() throws JspException {
     try {
-      Collection cities = (Collection)pageContext.getSession().getAttribute(CITIES);
+      HttpSession session = pageContext.getSession();
+      Collection cities = (Collection)session.getAttribute(CITIES);
       if(cities == null)
         return SKIP_BODY;
       Iterator i = cities.iterator();

@@ -1,6 +1,6 @@
 package tickets.model.dat;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * <p>Title: Tickets</p>
@@ -9,8 +9,9 @@ import java.io.*;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс City содержит данные о городе
  */
-
 public class City implements Serializable {
   private int id;
   private String name;

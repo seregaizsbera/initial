@@ -7,8 +7,9 @@ package tickets.controller;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Ќабор значений параметра ACTION, передаваемых в класс FrontController
  */
-
 public interface ActionParameters {
   String ACTION = "action";
   String LOGIN_ACTION = "login";
@@ -16,6 +17,5 @@ public interface ActionParameters {
   String ORDER_ACTION = "order";
   String DELETE_FLIGHT_ACTION = "delete";
   String UPDATE_FLIGHT_ACTION = "update";
-  String NEW_FLIGHT_ACTION = "new";
+  String INSERT_FLIGHT_ACTION = "insert";
 }
-

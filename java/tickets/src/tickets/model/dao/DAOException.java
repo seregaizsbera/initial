@@ -10,10 +10,9 @@ import tickets.util.RuntimeGenericException;
  * @author Sergey Bogdanov
  * @version 1.0
  *
- * Пробрасывается в с случае возникновения исключительных ситуаций при работе на
+ * Пробрасывается в случае возникновения исключительных ситуаций при работе на
  * уровне доступа к базе данных.
  */
-
 public class DAOException extends RuntimeGenericException {
   public DAOException() {
   }

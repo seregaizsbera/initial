@@ -1,9 +1,13 @@
 package tickets.model.dao;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Collection;
 import tickets.model.dat.Aircraft;
-import tickets.util.*;
+import tickets.util.Util;
 
 /**
  * <p>Title: Tickets</p>
@@ -12,8 +16,10 @@ import tickets.util.*;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс AircraftListDAO позволяет получить список самолетов из
+ * базы данных
  */
-
 public class AircraftListDAO extends AbstractDAO {
   static private AircraftListDAO instance = null;
 
@@ -30,13 +36,14 @@ public class AircraftListDAO extends AbstractDAO {
     ResultSet rs = null;
     try {
       con = getConnection();
-      String query ="select" +
-                    " id_aircraft," +
-                    " name_company," +
-                    " model" +
-                    " from aircrafts" +
-                    " join companies on aircrafts.id_company=companies.id_company" +
-                    " order by id_aircraft";
+      String query = "select" +
+                     " id_aircraft," +
+                     " name_company," +
+                     " model" +
+                     " from aircrafts" +
+                     " join companies" +
+                     " on aircrafts.id_company=companies.id_company" +
+                     " order by id_aircraft";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while(rs.next()) {
@@ -48,6 +55,8 @@ public class AircraftListDAO extends AbstractDAO {
       Util.debug("getFlights()", e);
       throw new DAOException(e);
     } finally {
+      close(rs);
+      close(stmt);
       close(con);
     }
     return result;

@@ -3,23 +3,10 @@
 <%@ page errorPage="/error/error_page.html" %>
 <%@ taglib uri="cities_tag" prefix="sergey" %>
 <%@ taglib uri="aircrafts_tag" prefix="custom" %>
-<%@ taglib uri="struts_bean_tag" prefix="bean" %>
 <%@ include file="Check.jsp" %>
-<jsp:include page="/banner.html"/>
-<jsp:useBean id="flights"
-             class="tickets.model.dat.FlightsBean"
-             scope="session"/>
-<jsp:setProperty name="flights" property="flightId"/>
-<bean:define id="flight"
-             name="flights"
-             property="flight"
-             type="tickets.model.dat.Flight"
-             scope="session"
-             toScope="page"
-/>
 <html>
  <head>
-   <title>АС Билеты - Редактирование рейса</title>
+  <title>АС Билеты - Новый рейс</title>
   <script language="javascript"
           src="<%=request.getContextPath()%>/validate_form.js">
   </script>
@@ -44,18 +31,16 @@
   --></script>
  </head>
  <body>
+  <jsp:include page="/banner.html"/>
   <h1>Введите параметры рейса</h1>
   <form method="post"
         action="<%=request.getContextPath()%>/action.html"
         onSubmit="javascript:return validateForm(this)">
-   <input type="hidden" name="action" value="update">
-   <input type="hidden"
-          name="flightId"
-          value="<jsp:getProperty name="flight" property="id"/>">
+   <input type="hidden" name="action" value="insert">
    <table cellpadding="5">
     <tr>
      <td>Номер</td>
-     <td><jsp:getProperty name="flight" property="id"/></td>
+     <td><i>(Задается автоматически)</i></td>
     </tr>
     <tr>
      <td>День вылета</td>
@@ -64,7 +49,6 @@
              maxlength="10"
              size="10"
              name="departure_date"
-             value="<jsp:getProperty name="flight" property="departureDate"/>"
              onChange="javascript:checkDate(this, 'День вылета')"
       > <i>(дд.мм.гггг)</i><small>*</small>
      </td>
@@ -76,7 +60,6 @@
              maxlength="5"
              size="5"
              name="departure_time"
-             value="<jsp:getProperty name="flight" property="departureTime"/>"
              onChange="javascript:checkTime(this, 'Время взлета')"
       > <i>(чч:мм)</i><small>*</small>
      </td>
@@ -89,7 +72,6 @@
              maxlength="10"
              size="10"
              name="arrival_date"
-             value="<jsp:getProperty name="flight" property="arrivalDate"/>"
              onChange="javascript:checkDate(this, 'День прилета')"
       > <i>(дд.мм.гггг)</i><small>*</small>
      </td>
@@ -101,7 +83,6 @@
              maxlength="5"
              size="5"
              name="arrival_time"
-             value="<jsp:getProperty name="flight" property="arrivalTime"/>"
              onChange="javascript:checkTime(this, 'Время приземления')"
       > <i>(чч:мм)</i><small>*</small>
      </td>
@@ -110,15 +91,15 @@
      <td>Город отправления</td>
      <td>
       <select name="departure_city">
-       <sergey:cities selected="<%=flight.getIdDepartureCity()%>"/>
+       <sergey:cities/>
       </select> <small>*</small>
      </td>
     </tr>
     <tr>
-     <td align>Город прибытия</td>
+     <td>Город прибытия</td>
      <td>
       <select name="arrival_city">
-       <sergey:cities selected="<%=flight.getIdArrivalCity()%>"/>
+       <sergey:cities/>
       </select> <small>*</small>
      </td>
     </tr>
@@ -126,7 +107,7 @@
      <td>Самолет</td>
      <td>
       <select name="aircraft">
-        <custom:aircrafts selected="<%=flight.getIdAircraft()%>"/>
+        <custom:aircrafts/>
       </select> <small>*</small>
      </td>
     </tr>
@@ -134,9 +115,8 @@
      <td>Цена билетов на места 1-го класса</td>
      <td>
       <input type="text"
-             size="10"
              name="price_1st_class"
-             value="<jsp:getProperty name="flight" property="price1stClass"/>"
+             size="10"
              maxlength="10"
              onChange="javascript:checkPrice(this, 'Цена 1-го класса')"
       > <small>*</small>
@@ -145,9 +125,8 @@
      <td>Цена билетов на места 2-го класса</td>
      <td>
       <input type="text"
-             size="10"
              name="price_2nd_class"
-             value="<jsp:getProperty name="flight" property="price2ndClass"/>"
+             size="10"
              maxlength="10"
              onChange="javascript:checkPrice(this, 'Цена 2-го класса')"
       > <small>*</small>

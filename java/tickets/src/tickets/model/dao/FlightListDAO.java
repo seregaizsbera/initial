@@ -1,9 +1,12 @@
 package tickets.model.dao;
 
-import java.math.*;
-import java.sql.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import tickets.model.dat.Flight;
+import tickets.model.dat.FlightsBean;
 import tickets.model.valueobjects.Currency;
 import tickets.model.dat.SearchFilter;
 import tickets.util.Util;
@@ -15,8 +18,10 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс FlightListDAO предоставляет доступ к списку рейсов на уровне базы
+ * данных
  */
-
 public class FlightListDAO extends AbstractDAO {
   static private FlightListDAO instance = null;
 
@@ -25,8 +30,10 @@ public class FlightListDAO extends AbstractDAO {
     flight.setArrivalDate(getString(rs, "c2"));
     flight.setDepartureCity(getString(rs, "c3"));
     flight.setArrivalCity(getString(rs, "c4"));
-    flight.setPrice1stClass(new Currency(new BigDecimal(getFloat(rs, "c5").doubleValue())));
-    flight.setPrice2ndClass(new Currency(new BigDecimal(getFloat(rs, "c6").doubleValue())));
+    flight.setPrice1stClass(
+        new Currency(new BigDecimal(getFloat(rs, "c5").doubleValue())));
+    flight.setPrice2ndClass(
+        new Currency(new BigDecimal(getFloat(rs, "c6").doubleValue())));
     flight.setAirCraftModel(getString(rs, "c7"));
     flight.setCount1stClass(getInt(rs, "c8").intValue());
     flight.setCount2ndClass(getInt(rs, "c9").intValue());
@@ -61,15 +68,20 @@ public class FlightListDAO extends AbstractDAO {
     if(filter.getDepartureDate() != null)
       result += " and (Date(date_departure)=?)";
     if(filter.getDepartureTime() != null)
-      result += " and (Time(date_departure)" + getSqlBooleanOperator(filter.getDepartureTimeCondition()) + "?)";
+      result += " and (Time(date_departure)" +
+                getSqlBooleanOperator(filter.getDepartureTimeCondition()) +
+                "?)";
     if(filter.getArrivalDate() != null)
       result += " and (Date(date_arrival)=?)";
     if(filter.getArrivalTime() != null)
-      result += " and (Time(date_arrival)" + getSqlBooleanOperator(filter.getArrivalTimeCondition()) + "?)";
+      result += " and (Time(date_arrival)" +
+                getSqlBooleanOperator(filter.getArrivalTimeCondition()) + "?)";
     return result;
   }
 
-  private void makeStatementParameters(PreparedStatement stmt, SearchFilter filter) throws SQLException {
+  private void makeStatementParameters(PreparedStatement stmt,
+                                       SearchFilter filter)
+      throws SQLException {
     if(filter == null)
       return;
     int index = 0;
@@ -89,9 +101,9 @@ public class FlightListDAO extends AbstractDAO {
 
   protected FlightListDAO() {}
 
-  public Map FindFlights(SearchFilter filter) {
+  public FlightsBean findFlights(SearchFilter filter) {
     Connection con = null;
-    Map result = new HashMap();
+    FlightsBean result = new FlightsBean();
     PreparedStatement stmt = null;
     ResultSet rs = null;
     try {
@@ -127,14 +139,18 @@ public class FlightListDAO extends AbstractDAO {
       while(rs.next()) {
         Flight flight = new Flight();
         populate(rs, flight);
-        result.put(new Integer(flight.getId()), flight);
+        result.setNewFlight(flight);
       }
     } catch (SQLException e) {
       Util.debug("getFlights()", e);
       throw new DAOException(e);
     } finally {
+      close(rs);
+      close(stmt);
       close(con);
     }
+    if(result.isEmpty())
+      result = null;
     return result;
   }
 

@@ -1,6 +1,6 @@
 package tickets.model.valueobjects;
 
-import java.io.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -13,7 +13,6 @@ import java.math.BigDecimal;
  *
  * Содержит данные, представляющие денежную величину.
  */
-
 public class Currency implements Serializable {
   /**
    * Порядок дробной части.
@@ -124,7 +123,8 @@ public class Currency implements Serializable {
    */
   public Currency add(Currency currency) {
     this.fractionalValue += currency.getFractionalValue();
-    this.integerValue += currency.getIntegerValue() + (this.fractionalValue / ORDER);
+    this.integerValue += currency.getIntegerValue() +
+                         (this.fractionalValue / ORDER);
     this.fractionalValue = this.fractionalValue % ORDER;
     return this;
   }
@@ -138,7 +138,8 @@ public class Currency implements Serializable {
   }
 
   public String toString() {
-    return "" + getIntegerValue() + "." + getFractionalValue();
+    return "" + getIntegerValue() + "." +
+           (getFractionalValue() < 10 ? "0" : "") + getFractionalValue();
   }
 }
 

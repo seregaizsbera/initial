@@ -1,6 +1,5 @@
 package tickets.model.dat;
 
-import java.util.*;
 import tickets.util.Util;
 
 /**
@@ -10,8 +9,9 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс SearchFilter содержит данные о поисковом фильтре
  */
-
 public class SearchFilter {
   static public final int BEFORE = 1;
   static public final int AFTER = 2;

@@ -3,7 +3,9 @@
 <table>
  <tr>
   <td align="left" width="90%"><h1>Летайте нашими самолетами!</h1></td>
-  <td align="right" width="10%"><a href="/Tickets/goodbye.html">Выход</a></td>
+  <td align="right" width="10%">
+   <a href="<%=request.getContextPath()%>/goodbye.html">Выход</a>
+  </td>
  </tr>
 </table>
 <hr>

@@ -1,6 +1,6 @@
 package tickets.util;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * <p>Title: Tickets</p>
@@ -10,8 +10,8 @@ import java.io.*;
  * @author Sergey Bogdanov
  * @version 1.0
  */
-
-public class RuntimeGenericException extends RuntimeException implements Serializable {
+public class RuntimeGenericException extends RuntimeException
+    implements Serializable {
   private Throwable parent;
 
   public RuntimeGenericException() {

@@ -1,9 +1,14 @@
 package tickets.model.dao;
 
-import java.io.*;
-import java.math.*;
-import java.sql.*;
-import tickets.model.dao.ConnectionSource;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import tickets.model.connection.ConnectionSource;
+import tickets.model.connection.ConnectionSourceFactory;
 import tickets.model.valueobjects.Currency;
 import tickets.util.Util;
 
@@ -17,12 +22,11 @@ import tickets.util.Util;
  *
  * ”тилитарный класс дл€ от котогорого удобно наследовать
  * DAO модули. ѕредоставл€ет сервис получени€ соединений к базе данных с
- * помощью ConnectionSource, которым конфигурируетс€ в конструкторе. ѕо
- * умолчанию используетс€ имплементаци€ ConnectionSource которую возвращает
- * ContainerConnectionSource.getInstance().
+ * помощью ConnectionSource, которым конфигурируетс€ в конструкторе.
  */
 abstract class AbstractDAO {
-  private ConnectionSource connectionSource = ContainerConnectionSource.getInstance();
+  private ConnectionSource connectionSource =
+      ConnectionSourceFactory.getConnectionSource();
 
   protected boolean printClosingErrors = true;
 
@@ -144,7 +148,8 @@ abstract class AbstractDAO {
     return DAOUtil.getFloat(rs, index);
   }
 
-  protected static final Float getFloat(ResultSet rs, String str) throws SQLException {
+  protected static final Float getFloat(ResultSet rs, String str)
+      throws SQLException {
     return DAOUtil.getFloat(rs, str);
   }
 
@@ -198,38 +203,7 @@ abstract class AbstractDAO {
       return false;
     }
   }
-/*
-  protected static String makeSqlStringValue(String str) {
-    if(str == null || str.equals(""))
-      str = "null";
-    char chars[] = str.toCharArray();
-    String result = "";
-    for(int i = 0; i < chars.length; i++) {
-      result += chars[i];
-      if(chars[i] == '\'')
-        result += chars[i];
-    }
-    result = "'" + result + "'";
-    return result;
-  }
-*/
-  /**
-   * Create SQL expression representing condition for record to
-   * contain the same value in specified column as strValue
-   *
-   * @param str value from the column
-   * @return string representing desired expression in SQL
-   */
-/*
-  public String makeSqlBooleanValue(String str) {
-    str = makeSqlStringValue(str);
-    if(str.equals("null"))
-      str = " is null";
-    else
-      str = '=' + str;
-    return str;
-  }
-*/
+
   protected static final void setString(
           PreparedStatement pstmt,
           int index,

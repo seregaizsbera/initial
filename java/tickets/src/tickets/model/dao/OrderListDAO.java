@@ -1,7 +1,11 @@
 package tickets.model.dao;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import tickets.model.dat.Order;
 import tickets.util.Util;
 
@@ -12,8 +16,10 @@ import tickets.util.Util;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Класс OrderListDAO предоставляет доступ к списку заказов на уровне базы
+ * данных
  */
-
 public class OrderListDAO extends AbstractDAO {
   static private OrderListDAO instance = null;
 
@@ -33,7 +39,11 @@ public class OrderListDAO extends AbstractDAO {
     Collection result = new ArrayList();
     try {
       con = getConnection();
-      String query = "select id_order, id_flight, class as class_type, count as number_of_places from orders";
+      String query = "select id_order" +
+                     ", id_flight" +
+                     ", class as class_type" +
+                     ", count as number_of_places" +
+                     " from orders";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while(rs.next()) {
@@ -45,8 +55,12 @@ public class OrderListDAO extends AbstractDAO {
       Util.debug("getOrders()", e);
       throw new DAOException(e);
     } finally {
+      close(rs);
+      close(stmt);
       close(con);
     }
+    if(result.isEmpty())
+      result = null;
     return result;
   }
 

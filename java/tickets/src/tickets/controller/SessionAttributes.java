@@ -7,11 +7,11 @@ package tickets.controller;
  * <p>Company: Sberbank</p>
  * @author Sergey Bogdanov
  * @version 1.0
+ *
+ * Набор используемых атрибутов сессии и их типичные значения.
+ * URI всех используемых в приложении сервлетов и JSP.
  */
-
 public interface SessionAttributes {
-  String CONTENT_TYPE = "text/html; charset=windows-1251";
-
   String NEW_SESSION = "newSession";
   String CLIENT_SESSION = "clientSession";
   String ADMIN_SESSION = "adminSession";
@@ -23,7 +23,7 @@ public interface SessionAttributes {
   String MAKE_ORDER_SERVLET = "/client/make_order.html";
   String DELETE_FLIGHT_SERVLET = "/admin/delete_flight.html";
   String UPDATE_FLIGHT_SERVLET = "/admin/update_flight.html";
-  String NEW_FLIGHT_SERVLET = "/admin/new_flight.html";
+  String INSERT_FLIGHT_SERVLET = "/admin/insert_flight.html";
 
   String HTML_SUFFIX = ".html";
   String ACTION_HTML = "/action.html";

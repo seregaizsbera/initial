@@ -18,6 +18,11 @@
     <jsp-file>/jsps/admin/AdminFlights.jsp</jsp-file>
   </servlet>
   <servlet>
+    <servlet-name>AdminNewFlightJsp</servlet-name>
+    <display-name>/jsps/admin/AdminNewFlight.jsp</display-name>
+    <jsp-file>/jsps/admin/AdminNewFlight.jsp</jsp-file>
+  </servlet>
+  <servlet>
     <servlet-name>AdminOrdersJsp</servlet-name>
     <display-name>/jsps/admin/AdminOrders.jsp</display-name>
     <jsp-file>/jsps/admin/AdminOrders.jsp</jsp-file>
@@ -63,6 +68,11 @@
     <jsp-file>/jsps/GoodBye.jsp</jsp-file>
   </servlet>
   <servlet>
+    <servlet-name>InsertFlight</servlet-name>
+    <display-name>tickets.controller.admin.InsertFlight</display-name>
+    <servlet-class>tickets.controller.admin.InsertFlight</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>LoginDispatcher</servlet-name>
     <display-name>tickets.controller.LoginDispatcher</display-name>
     <servlet-class>tickets.controller.LoginDispatcher</servlet-class>
@@ -76,11 +86,6 @@
     <servlet-name>MakeOrder</servlet-name>
     <display-name>tickets.controller.client.MakeOrder</display-name>
     <servlet-class>tickets.controller.client.MakeOrder</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>NewFlight</servlet-name>
-    <display-name>tickets.controller.admin.NewFlight</display-name>
-    <servlet-class>tickets.controller.admin.NewFlight</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>OrderJsp</servlet-name>
@@ -119,15 +124,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>FrontController</servlet-name>
-    <url-pattern>*.dtd</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>FrontController</servlet-name>
-    <url-pattern>*.jsp</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>FrontController</servlet-name>
-    <url-pattern>*.tld</url-pattern>
+    <url-pattern>*.*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FrontController</servlet-name>
@@ -146,7 +143,11 @@
     <url-pattern>/admin/flights.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>NewFlight</servlet-name>
+    <servlet-name>InsertFlight</servlet-name>
+    <url-pattern>/admin/insert_flight.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminNewFlightJsp</servlet-name>
     <url-pattern>/admin/new_flight.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
@@ -238,23 +239,19 @@
     <location>/error/error_page.html</location>
   </error-page>
   <taglib>
-    <taglib-uri>admin_flights_tag</taglib-uri>
-    <taglib-location>/taglib/admin_flights.tld</taglib-location>
-  </taglib>
-  <taglib>
-    <taglib-uri>admin_orders_tag</taglib-uri>
-    <taglib-location>/taglib/admin_orders.tld</taglib-location>
-  </taglib>
-  <taglib>
     <taglib-uri>aircrafts_tag</taglib-uri>
-    <taglib-location>/taglib/aircrafts.tld</taglib-location>
+    <taglib-location>/WEB-INF/taglib/aircrafts.tld</taglib-location>
   </taglib>
   <taglib>
     <taglib-uri>cities_tag</taglib-uri>
-    <taglib-location>/taglib/cities.tld</taglib-location>
+    <taglib-location>/WEB-INF/taglib/cities.tld</taglib-location>
   </taglib>
   <taglib>
-    <taglib-uri>flights_tag</taglib-uri>
-    <taglib-location>/taglib/flights.tld</taglib-location>
+    <taglib-uri>struts_bean_tag</taglib-uri>
+    <taglib-location>/WEB-INF/taglib/struts-bean.tld</taglib-location>
+  </taglib>
+  <taglib>
+    <taglib-uri>struts_logic_tag</taglib-uri>
+    <taglib-location>/WEB-INF/taglib/struts-logic.tld</taglib-location>
   </taglib>
 </web-app>
